@@ -9,12 +9,12 @@ uint32_t* getMSPInitialLocation(void)
 uint32_t* getNewThreadStack(uint32_t offset)
 {
 	unsigned int mspval = (unsigned int)getMSPInitialLocation();
-	
-	//uint32_t mspval = getMSPInitialLocation();
-	//unsigned int mspaddress = &ptrmsp;
-	//unsigned int psp = mspaddress - offset;
-	//usigned int* ptrpsp = (unsigned int)psp;
-	
+	unsigned int pspval = mspval - offset;
+	if (pspval%8!=0)
+	{
+		pspval = pspval + (8 - (pspval%8));
+	}
+	return (unsigned int*)pspval;
 }
 
 void setThreadingWithPSP(uint32_t* threadStack)
