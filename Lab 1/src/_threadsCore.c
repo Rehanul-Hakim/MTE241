@@ -10,14 +10,18 @@ uint32_t* getNewThreadStack(uint32_t offset)
 {
 	unsigned int mspval = (unsigned int)getMSPInitialLocation();
 	unsigned int pspval = mspval - offset;
-	if (pspval%8!=0)
+	if (pspval%8!=0 || offset>2000)	//Max size of a stack defined as 2000
 	{
-		pspval = pspval + (8 - (pspval%8));
+		return 0;
+		//pspval = pspval + (8 - (pspval%8));
 	}
 	return (unsigned int*)pspval;
 }
 
 void setThreadingWithPSP(uint32_t* threadStack)
 {
-	
+	uint32_t pspval = (uint32_t) threadStack;
+	__set_PSP(pspval);
+	uint32_t ctrlval = __get_CONTROL();
+	__set_CONTROL(ctrlval | 0x10);
 }

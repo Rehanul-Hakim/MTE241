@@ -19,8 +19,16 @@ int main( void )
 	//Printf now goes to the UART, so be sure to have PuTTY open and connected
 	printf("Hello, world!\r\n");
 	
+	//test function 'uint32_t* getMSPInitialLocation(void)'
 	unsigned int* mspval = getMSPInitialLocation();
 	printf("%u\n",mspval);
+	
+	//test function 'uint32_t* getNewThreadStack(uint32_t offset)'
+	unsigned int* pspval = getNewThreadStack(512);
+	printf("%u\n",pspval);
+	
+	//test function 'setThreadingWithPSP(uint32_t* threadStack)'
+	setThreadingWithPSP(pspval);
 	
 	//Your code should always terminate in an endless loop if it is done. If you don't
 	//the processor will enter a hardfault and will be weird
