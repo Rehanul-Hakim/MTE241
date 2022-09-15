@@ -8,6 +8,7 @@
 #include "uart.h"
 
 #include "_threadsCore.h"
+#include "_kernelCore.h"
 
 //This is C. The expected function heading is int main(void)
 int main( void ) 
@@ -17,18 +18,22 @@ int main( void )
 	SystemInit();
 
 	//Printf now goes to the UART, so be sure to have PuTTY open and connected
-	printf("Hello, world!\r\n");
+	//printf("Hello, world!\r\n");
 	
 	//test function 'uint32_t* getMSPInitialLocation(void)'
 	unsigned int* mspval = getMSPInitialLocation();
-	printf("%u\n",mspval);
+	//printf("%u\n",mspval);
 	
 	//test function 'uint32_t* getNewThreadStack(uint32_t offset)'
 	unsigned int* pspval = getNewThreadStack(512);
-	printf("%u\n",pspval);
+	//printf("%u\n",pspval);
 	
 	//test function 'setThreadingWithPSP(uint32_t* threadStack)'
-	setThreadingWithPSP(pspval);
+	//setThreadingWithPSP(pspval);
+	
+	//Test kernel code
+	kernelInit();
+	osSched();
 	
 	//Your code should always terminate in an endless loop if it is done. If you don't
 	//the processor will enter a hardfault and will be weird
