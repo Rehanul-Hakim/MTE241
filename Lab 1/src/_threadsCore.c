@@ -22,6 +22,5 @@ void setThreadingWithPSP(uint32_t* threadStack)
 {
 	uint32_t pspval = (uint32_t) threadStack;
 	__set_PSP(pspval);
-	uint32_t ctrlval = __get_CONTROL();
-	__set_CONTROL(ctrlval | 0x10);
+	__set_CONTROL(0x02);	//Set to threading mode
 }
