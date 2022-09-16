@@ -149,16 +149,16 @@
           <Type>0</Type>
           <LineNumber>5</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
+          <Address>532</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>\\ecfile1.uwaterloo.ca\j2253che\My Documents\MTE241\Lab 1\src\svc_call.s</Filename>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>\ecfile1.uwaterloo.ca\j2253che\My Documents\MTE241\Lab 1\src\svc_call.s</Filename>
           <ExecCommand></ExecCommand>
-          <Expression></Expression>
+          <Expression>\\tim\src/svc_call.s\5</Expression>
         </Bp>
       </Breakpoint>
       <Tracepoint>
@@ -264,6 +264,30 @@
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\_threadsCore.c</PathWithFileName>
       <FilenameWithoutPath>_threadsCore.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>5</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\src\_kernelCore.c</PathWithFileName>
+      <FilenameWithoutPath>_kernelCore.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>6</FileNumber>
+      <FileType>2</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\src\svc_call.s</PathWithFileName>
+      <FilenameWithoutPath>svc_call.s</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

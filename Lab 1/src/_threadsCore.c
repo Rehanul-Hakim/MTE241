@@ -8,9 +8,13 @@ uint32_t* getMSPInitialLocation(void)
 
 uint32_t* getNewThreadStack(uint32_t offset)
 {
+	if (offset > 2000)	//Max size of stack is defined as 2000
+	{
+		return 0;
+	}
 	unsigned int mspval = (unsigned int)getMSPInitialLocation();
 	unsigned int pspval = mspval - offset;
-	if (pspval%8!=0 || offset>2000)	//Max size of a stack defined as 2000
+	if (pspval%8!=0)	//If not div by 8, offsets stack by an additional sizeof(uint32_t)
 	{
 		pspval = pspval - sizeof(uint32_t);
 		//pspval = pspval + (8 - (pspval%8));

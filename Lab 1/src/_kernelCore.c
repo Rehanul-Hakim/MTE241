@@ -1,3 +1,6 @@
+#include "_kernelCore.h"
+#include <stdint.h>
+
 void kernelInit(void)	//initialises memory structures and interrupts necessary to run the kernel
 {
 	SHPR3 |= 0xFF << 16;

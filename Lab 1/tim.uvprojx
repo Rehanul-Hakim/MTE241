@@ -403,6 +403,16 @@
               <FileType>1</FileType>
               <FilePath>.\src\_threadsCore.c</FilePath>
             </File>
+            <File>
+              <FileName>_kernelCore.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\_kernelCore.c</FilePath>
+            </File>
+            <File>
+              <FileName>svc_call.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\src\svc_call.s</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -1,4 +1,4 @@
-	AREA cleo_shordy,CODE,READONLY
+	AREA handle_pend,CODE,READONLY
 	GLOBAL PendSV_Handler
 	PRESERVE8
 PendSV_Handler

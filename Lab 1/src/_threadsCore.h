@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <LPC17xx.h>
-#ifndef CLEO
-#define CLEO = 0
+#ifndef CLEO_thread
+#define CLEO_thread
 
 //Obtains the initial location of MSP by looking it up in the vector table
 uint32_t* getMSPInitialLocation(void); 
