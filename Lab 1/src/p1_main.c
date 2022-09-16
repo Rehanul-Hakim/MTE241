@@ -21,15 +21,15 @@ int main( void )
 	//printf("Hello, world!\r\n");
 	
 	//test function 'uint32_t* getMSPInitialLocation(void)'
-	//unsigned int* mspval = getMSPInitialLocation();
+	unsigned int* mspval = getMSPInitialLocation();
 	//printf("%u\n",mspval);
 	
 	//test function 'uint32_t* getNewThreadStack(uint32_t offset)'
-	//unsigned int* pspval = getNewThreadStack(512);
+	unsigned int* pspval = getNewThreadStack(512);
 	//printf("%u\n",pspval);
 	
 	//test function 'setThreadingWithPSP(uint32_t* threadStack)'
-	//setThreadingWithPSP(pspval);
+	setThreadingWithPSP(pspval);
 	
 	//Test kernel code
 	kernelInit();

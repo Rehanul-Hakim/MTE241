@@ -17,7 +17,6 @@ uint32_t* getNewThreadStack(uint32_t offset)
 	if (pspval%8!=0)	//If not div by 8, offsets stack by an additional sizeof(uint32_t)
 	{
 		pspval = pspval - sizeof(uint32_t);
-		//pspval = pspval + (8 - (pspval%8));
 	}
 	return (unsigned int*)pspval;
 }
