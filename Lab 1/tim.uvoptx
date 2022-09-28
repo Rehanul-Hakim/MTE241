@@ -156,7 +156,7 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>\ecfile1.uwaterloo.ca\j2253che\My Documents\MTE241\Lab 1\src\svc_call.s</Filename>
+          <Filename>\\ecfile1.uwaterloo.ca\j2253che\ecfile1.uwaterloo.ca\j2253che\My Documents\MTE241\Lab 1\src\svc_call.s</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\tim\src/svc_call.s\5</Expression>
         </Bp>

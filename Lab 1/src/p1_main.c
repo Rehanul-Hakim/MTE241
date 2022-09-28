@@ -11,8 +11,10 @@
 #include "_kernelCore.h"
 
 //This is C. The expected function heading is int main(void)
+
 int main( void ) 
 {
+
 	//Always call this function at the start. It sets up various peripherals, the clock etc. If you don't call this
 	//you may see some weird behaviour
 	SystemInit();

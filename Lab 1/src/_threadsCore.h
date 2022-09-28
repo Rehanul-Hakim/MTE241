@@ -10,5 +10,4 @@ uint32_t* getNewThreadStack(uint32_t offset);
 //Sets the value of PSP to threadStack and ensures that the microcontroller is using that value by changing the CONTROL register
 void setThreadingWithPSP(uint32_t* threadStack); 
 
-
 #endif
