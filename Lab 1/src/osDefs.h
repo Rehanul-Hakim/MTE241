@@ -13,8 +13,7 @@ typedef struct thread_struct{
 }cleoThread;
 
 void osYield(void);	//pre-loads memory with important information to avoid problem of bootstrapping (context switch)
-void kernel_initialize(void);	//changes various chip settings and initializes important memory
-void create_thread(void);	//initialize any thread-specific memory, then add a new thread to statically defined array
-void kernel_start(void);	//initialize anything that the first thread needs before it gets going, and switches between PSP and MSP
+//void kernel_initialize(void);	//changes various chip settings and initializes important memory
+//void create_thread(void);	//initialize any thread-specific memory, then add a new thread to statically defined array
 
 #endif

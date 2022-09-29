@@ -3,6 +3,8 @@
 #include "osDefs.h"
 #include "_threadsCore.h"
 
+struct thread_struct threads[3];
+
 uint32_t* getMSPInitialLocation(void) 
 {
 	unsigned int* ptrmsp = (unsigned int*)0x0;
@@ -11,7 +13,7 @@ uint32_t* getMSPInitialLocation(void)
 
 uint32_t* getNewThreadStack(uint32_t offset)
 {
-	if (offset > 2000)	//Max size of stack is defined as 2000
+	if (offset > 0x2000)	//Max size of stack is defined as 2000
 	{
 		return 0;
 	}
@@ -31,18 +33,25 @@ void setThreadingWithPSP(uint32_t* threadStack)
 	__set_CONTROL(0x02);	//Set to threading mode
 }
 
-void threadFunction (void* args){
-	while(1)
-	{
-		printf("This is thread 1.");
-		osYield();
-	}
-}
 void osYield(void)
 {
-	uint32_t* sp = getNewThreadStack(0);
+	//Determine if a switch is necessary 
+	//If it is necessary, determing which thread to switch to
+	//Save a useful offset of the current thread stack pointer somewhere that it can access again once it is scheduled to run
+	//Trigger the PendSV interrupt
+	
+	ICSR |= 1 <<28;	//Calls svc_vall.s
+	__ASM("isb");
+}
+
+void createThread (void (*task)(void* args))
+{
+	//getting stack pointer to the beginning of thread
+	uint32_t* sp = getNewThreadStack(512);
+	//shift by 24 so that it is set to threading mode
 	*--sp = 1<<24;
-	*--sp = (uint32_t)threadFunction;	//threadFunction is a function pointer
+	//createThread is a function pointer from the user
+	*--sp = (uint32_t)task;	
 	
 	//sets contents of registers LR, R12, R3, R2, R1, R0
 	*--sp = 0xF;
@@ -60,4 +69,3 @@ void osYield(void)
 	*--sp = 0x4;
 	*--sp = 0x3;
 }
-
