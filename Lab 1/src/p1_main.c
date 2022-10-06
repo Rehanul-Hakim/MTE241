@@ -56,8 +56,7 @@ void osIdleTask(void* args)
 int main( void ) 
 {
 
-	//Always call this function at the start. It sets up various peripherals, the clock etc. If you don't call this
-	//you may see some weird behaviour
+	//Always call this function at the start. It sets up various peripherals, the clock etc. 
 	SystemInit();
 
 	//Printf now goes to the UART, so be sure to have PuTTY open and connected
