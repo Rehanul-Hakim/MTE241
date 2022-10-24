@@ -2,11 +2,8 @@
 #include "stdio.h"
 #include "_threadsCore.h"
 
-
-//number of threads existing
-int cleoNums = 0;
-//number of threads running/playing
-int cleoPlaying = 0;
+//array of structs to store threads
+cleoThread catArray[maxThreads]; 
 
 uint32_t* getMSPInitialLocation(void) 
 {
@@ -16,7 +13,7 @@ uint32_t* getMSPInitialLocation(void)
 
 uint32_t* getNewThreadStack(uint32_t offset)
 {
-	if (offset > 0x2000)	//Max size of stack is defined as 2000
+	if (offset > threadStackPool)	//Max size of stack is defined as 2000
 	{
 		return 0;
 	}
@@ -32,8 +29,9 @@ uint32_t* getNewThreadStack(uint32_t offset)
 void setThreadingWithPSP(uint32_t* threadStack)
 {
 	uint32_t pspval = (uint32_t) threadStack;
+  __set_CONTROL(0x02);	//Set to threading mode
 	__set_PSP(pspval);
-	__set_CONTROL(0x02);	//Set to threading mode
+
 }
 
 //creating a new thread, returns index of new thread if successful, returns -1 if array is full
@@ -47,11 +45,13 @@ int createThread (void (*task)(void* args))
 		//getting stack pointer to the beginning of thread, under the stack reserved for handler mode and existing threads
 		uint32_t* sp = getNewThreadStack((cleoNums + 1)*threadStackSize);
 
+		catArray[cleoNums].taskPointer = sp;
+		
 		//shift by 24 so that it is set to threading mode
 		*--sp = 1<<24;
 		
 		//task a program counter, set to the current running function
-		*--sp = (uint32_t)task;	
+		*--sp = (uint32_t)task;	//PC
 		
 		//sets contents of registers
 		*--sp = 0xE; //LR
@@ -72,7 +72,6 @@ int createThread (void (*task)(void* args))
 		*--sp = 0x4; //R4
 		
 		//the new thread in the array 
-		catArray[cleoNums].taskPointer = sp;
 		cleoNums++;
 		cleoPlaying++;
 		return cleoNums-1;

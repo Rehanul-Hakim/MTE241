@@ -10,7 +10,7 @@
 
 //Stack defines
 #define threadStackSize 0x215
-#define threadStackPool uint32_t 0x2000
+#define threadStackPool 0x2000
 
 //Maximum number of threads to be 8, allocated statically
 #define maxThreads 8

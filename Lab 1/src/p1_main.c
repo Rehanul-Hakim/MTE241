@@ -66,7 +66,7 @@ int main( void )
 	unsigned int* mspval = getMSPInitialLocation();
 	
 	//Check what initial stack locatio is:
-	printf("MSP initially: %x\n",(uint32_t)mspval);
+	//printf("MSP initially: %x\n",(uint32_t)mspval);
 	
 	//test function 'uint32_t* getNewThreadStack(uint32_t offset)'
 	//unsigned int* pspval = getNewThreadStack(512);

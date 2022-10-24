@@ -3,7 +3,11 @@
 #include <stdint.h>
 
 //get the index of the task running
-extern int cleoIndex;
+int cleoIndex = 0;
+//number of threads existing
+int cleoNums = 0;
+//number of threads running/playing
+int cleoPlaying = 0;
 
 void kernelInit(void)	//initializes memory structures and interrupts necessary to run the kernel
 {
@@ -43,7 +47,7 @@ void kernel_start(void)
 		osYield();
 	}
 	// makes sure that the function does not end
-	while (1);
+	//while (1);
 }
 int task_switch(void)
 {
