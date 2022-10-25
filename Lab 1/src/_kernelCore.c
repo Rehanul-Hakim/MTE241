@@ -22,9 +22,10 @@ void osYield(void)
 	//the first time running storing and setting status does not happen
 	if (cleoIndex >= 0)
 		{
-		// save a useful offset of the current thread's stack pointer somewhere so it can be accessed again
+		//changing the status to sleeping since we are switching
 		catArray[cleoIndex].status = SLEEPING;	
-		// moving the task pointer down to allocate space for 16 registers to be stored by the handler
+		// save a useful offset of the current thread's stack pointer somewhere so it can be accessed again,
+       		//moving the task pointer down to allocate space for 16 registers to be stored by the handler
 		catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 16*4);
 		}
 	//go to the next task in the array, if we are at the end, loop back to the beginning
