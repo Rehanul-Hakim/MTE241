@@ -45,7 +45,8 @@ int createThread (void (*task)(void* args))
 		catArray[cleoNums].threadFunc = task;
 		//before the thread is created, the status is set to waiting/sleeping
 		catArray[cleoNums].status = SLEEPING;
-		//getting stack pointer to the beginning of thread, under the stack reserved for handler mode and existing threads
+		//getting stack pointer to the beginning of thread, under 
+		//the stack reserved for handler mode and existing threads
 		uint32_t* sp = getNewThreadStack((cleoNums + 1)*threadStackSize);
 
 		//shift by 24 so that it is set to threading mode
