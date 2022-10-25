@@ -9,24 +9,24 @@
 #define ICSR *(uint32_t*)0XE000ED04
 
 //Stack defines
-#define threadStackSize 0x215
+#define threadStackSize 0x200
 #define threadStackPool 0x2000
 
 //Maximum number of threads to be 8, allocated statically
 #define maxThreads 8
 
-//cleo cat thread states
-#define WAKING 0 //created, but not running
+//Cleo cat thread state
+#define WAKING 0 //awake, but not playing
 #define PLAYING 1 //running and playing
-#define SLEEPING 2 //not running but ready to go
+#define SLEEPING 2 //sleeping but not playing yet
 #define DESTROYED 3 //for use later, especially for threads that end. This indicates that a new thread COULD go here if it needs to
 
 //Thread data structure
+//Defines a structure called “thread_struct”, with “cleoThread” as the alias for the struct.  
 typedef struct thread_struct{
-	void (*threadFunc)(void* args);
-	//stack pointer for this task
-	uint32_t* taskPointer;
-	int status;
+	void (*threadFunc)(void* args);	//threadFunc is the function pointer
+	uint32_t* taskPointer;	//stack pointer for this task
+	int status;	//Cleo cat thread state
 }cleoThread;
 
 extern cleoThread catArray[maxThreads]; //catArray is an array size maxThreads containing cleoThread

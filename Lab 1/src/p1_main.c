@@ -24,6 +24,7 @@
 int x = 0;
 int y = 0;
 
+//Creating task 1
 void task1(void* args)
 {
 	while(1)
@@ -33,6 +34,8 @@ void task1(void* args)
 		osYield();
 	}
 }
+
+//Creating task 2
 void task2(void* args)
 {
 	while(1)
@@ -42,6 +45,8 @@ void task2(void* args)
 		osYield();
 	}
 }
+
+//Creating task 3
 void osIdleTask(void* args)
 {
 	while(1)
@@ -52,28 +57,19 @@ void osIdleTask(void* args)
 }
 
 //This is C. The expected function heading is int main(void).
-
 int main( void ) 
 {
-
 	//Always call this function at the start. It sets up various peripherals, the clock etc. 
 	SystemInit();
 
-	//Printf now goes to the UART, so be sure to have PuTTY open and connected
+	//Printf now goes to the UART
 	printf("Hello, world!\r\n");
 	
 	//Getting our initial stack location
 	unsigned int* mspval = getMSPInitialLocation();
 	
 	//Check what initial stack locatio is:
-	//printf("MSP initially: %x\n",(uint32_t)mspval);
-	
-	//test function 'uint32_t* getNewThreadStack(uint32_t offset)'
-	//unsigned int* pspval = getNewThreadStack(512);
-	//printf("%u\n",pspval);
-	
-	//test function 'setThreadingWithPSP(uint32_t* threadStack)'
-	//setThreadingWithPSP(pspval);
+	printf("MSP initially: %x\n",(uint32_t)mspval);
 	
 	//Initialize the kernel
 	kernelInit();
@@ -87,6 +83,6 @@ int main( void )
 	kernel_start();
 	
 	//Your code should always terminate in an endless loop if it is done. If you don't
-	//the processor will enter a hardfault and will be weird
+	//the processor will enter a hardfault and will be weird.
 	while(1);
 }

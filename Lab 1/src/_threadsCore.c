@@ -2,20 +2,23 @@
 #include "stdio.h"
 #include "_threadsCore.h"
 
-//array of structs to store threads
+//Array of structs to store threads.
+//catArray is an array of size maxThreads containing cleoThread
 cleoThread catArray[maxThreads]; 
 
+//Obtains the initial location of MSP by looking it up in the vector table
 uint32_t* getMSPInitialLocation(void) 
 {
 	unsigned int* ptrmsp = (unsigned int*)0x0;
 	return (uint32_t*) *ptrmsp;
 }
 
+//Returns the address of a new PSP with offset of "offset" bytes from MSP.
 uint32_t* getNewThreadStack(uint32_t offset)
 {
-	if (offset > threadStackPool)	//Max size of stack is defined as 2000
+	if (offset > threadStackPool)	//Check if offset is greater than the size of stack pool (2000)
 	{
-		return 0;
+		return 0;	//return error
 	}
 	unsigned int mspval = (unsigned int)getMSPInitialLocation();
 	unsigned int pspval = mspval - offset;
@@ -26,12 +29,12 @@ uint32_t* getNewThreadStack(uint32_t offset)
 	return (unsigned int*)pspval;
 }
 
+//Sets the value of PSP to threadStack and ensures that the microcontroller is using that value by changing the CONTROL register
 void setThreadingWithPSP(uint32_t* threadStack)
 {
 	uint32_t pspval = (uint32_t) threadStack;
-  __set_CONTROL(0x02);	//Set to threading mode
 	__set_PSP(pspval);
-
+	__set_CONTROL(0x02);	//Set to threading mode
 }
 
 //creating a new thread, returns index of new thread if successful, returns -1 if array is full
@@ -45,8 +48,6 @@ int createThread (void (*task)(void* args))
 		//getting stack pointer to the beginning of thread, under the stack reserved for handler mode and existing threads
 		uint32_t* sp = getNewThreadStack((cleoNums + 1)*threadStackSize);
 
-		catArray[cleoNums].taskPointer = sp;
-		
 		//shift by 24 so that it is set to threading mode
 		*--sp = 1<<24;
 		
@@ -70,6 +71,9 @@ int createThread (void (*task)(void* args))
 		*--sp = 0x6; //R6
 		*--sp = 0x5; //R5
 		*--sp = 0x4; //R4
+		
+		//assign the taskpointer (stack pointer) to sp
+		catArray[cleoNums].taskPointer = sp;
 		
 		//the new thread in the array 
 		cleoNums++;
