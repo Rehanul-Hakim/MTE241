@@ -15,7 +15,8 @@ void kernelInit(void)	//initializes memory structures and interrupts necessary t
 }
 void osYield(void)	//called by the kernel to schedule which threads to run
 {
-	//cleoIndex will only = -1 when it's the very first time running, if it's the first time running storing and setting status does not happen
+	//cleoIndex will only = -1 when it's the very first time running, if it's 
+	//the first time running storing and setting status does not happen
 	if (cleoIndex >= 0)
 		{
 		// save a useful offset of the current thread's stack pointer somewhere so it can be accessed again
@@ -32,7 +33,8 @@ void osYield(void)	//called by the kernel to schedule which threads to run
 	__asm("isb");
 }
 
-//initialize anything that the first thread needs and triggers the interrupt to start the first thread, and switches SP to PSP
+//initialize anything that the first thread needs and triggers the interrupt to start the 
+//first thread, and switches SP to PSP
 void kernel_start(void)
 {
 	//is there a thread to run? if yes:
@@ -54,6 +56,6 @@ int task_switch(void)
 	//set the new PSP
 	__set_PSP((uint32_t)catArray[cleoIndex].taskPointer);
 	return 1;	//You are free to use this return value in your
-						//assembly eventually. It will be placed in r0, so be sure to
-						//access it before overwriting r0.
+			//assembly eventually. It will be placed in r0, so be sure to
+			//access it before overwriting r0.
 }
