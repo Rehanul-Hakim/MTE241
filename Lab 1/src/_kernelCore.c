@@ -23,7 +23,7 @@ void osYield(void)
 	if (cleoIndex >= 0)
 		{
 		// save a useful offset of the current thread's stack pointer somewhere so it can be accessed again
-		catArray[cleoIndex].status = SLEEPING;	
+		catArray[cleoIndex].status = WAKING;	
 		// moving the task pointer down to allocate space for 16 registers to be stored by the handler
 		catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 16*4);
 		}

@@ -59,7 +59,10 @@ void osIdleTask(void* args)
 //This is C. The expected function heading is int main(void).
 int main( void ) 
 {
-	//Always call this function at the start. It sets up various peripherals, the clock etc. 
+	//Configure SysTick to generate an interrupt every millisecond
+	SysTick_Config(SystemCoreClock/1000);
+	
+	//Always call this function at the start. It sets up various peripherals, the clock etc
 	SystemInit();
 
 	//Printf now goes to the UART

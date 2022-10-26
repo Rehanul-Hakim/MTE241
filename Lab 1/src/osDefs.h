@@ -16,9 +16,9 @@
 #define maxThreads 8
 
 //Cleo cat thread state
-#define WAKING 0 //awake, but not playing
+#define WAKING 0 //awake, and ready to play (but not yet playing)
 #define PLAYING 1 //running and playing
-#define SLEEPING 2 //sleeping but not playing yet
+#define SLEEPING 2 //sleeping until timer is done, then goes to WAKING
 #define DESTROYED 3 //for use later, especially for threads that end. This indicates that a new thread COULD go here if it needs to
 #define BLOCKED 4	//
 
@@ -33,6 +33,7 @@ typedef struct thread_struct{
 extern cleoThread catArray[maxThreads]; //catArray is an array size maxThreads containing cleoThread
 extern int cleoNums; //current number of threads created
 extern int cleoPlaying; //number of threads currently running
+extern int cleoIndex; //the index of the current running thread
 
 void osYield(void);	//pre-loads memory with important information to avoid problem of bootstrapping (context switch)
 

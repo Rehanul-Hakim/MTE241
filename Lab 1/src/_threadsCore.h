@@ -13,4 +13,7 @@ uint32_t* getNewThreadStack(uint32_t offset);
 //Sets up the threads
 int createThread (void (*task)(void* args));
 
+//Using SysTick to context switch
+void SysTick_Handler(void);
+
 #endif

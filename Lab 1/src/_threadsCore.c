@@ -82,3 +82,28 @@ int createThread (void (*task)(void* args))
 	} 
 	return -1;
 }
+
+void SysTick_Handler(void)
+{
+	
+	/*
+	Calls scheduler function to determine which thread to run
+	next and trigger PendSV
+	*/
+	//cleoIndex will only be -1 when it's the very first time running, if it's 
+	//the first time running storing and setting status does not happen
+	if (cleoIndex >= 0)
+		{
+		// save a useful offset of the current thread's stack pointer somewhere so it can be accessed again
+		catArray[cleoIndex].status = WAKING;	
+		// moving the task pointer down to allocate space for 8 registers to be stored by the handler
+		catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
+		}
+	//go to the next task in the array, if we are at the end, loop back to the beginning
+	cleoIndex = (cleoIndex+1)%(cleoNums);
+	//set the new current task to running/playing
+	catArray[cleoIndex].status = PLAYING;
+	// trigger the PendSV interrupt
+	ICSR |= 1 << 28;
+	__asm("isb");
+}
