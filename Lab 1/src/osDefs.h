@@ -20,6 +20,7 @@
 #define PLAYING 1 //running and playing
 #define SLEEPING 2 //sleeping but not playing yet
 #define DESTROYED 3 //for use later, especially for threads that end. This indicates that a new thread COULD go here if it needs to
+#define BLOCKED 4	//
 
 //Thread data structure
 //Defines a structure called “thread_struct”, with “cleoThread” as the alias for the struct.  
