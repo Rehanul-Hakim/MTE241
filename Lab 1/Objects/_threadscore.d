@@ -10,3 +10,4 @@
 .\objects\_threadscore.o: C:\Software\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\_threadscore.o: src\_threadsCore.h
 .\objects\_threadscore.o: src\osDefs.h
+.\objects\_threadscore.o: C:\Software\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h

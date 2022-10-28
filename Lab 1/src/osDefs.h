@@ -3,6 +3,7 @@
 #define CLEO_osDefs
 
 #include <LPC17xx.h>
+#include "stdbool.h"
 
 //registers used for the interrupts
 #define SHPR3 *(uint32_t*)0xE000ED20
@@ -28,6 +29,9 @@ typedef struct thread_struct{
 	void (*threadFunc)(void* args);	//threadFunc is the function pointer
 	uint32_t* taskPointer;	//stack pointer for this task
 	int status;	//Cleo cat thread state
+	int playTime; //time in ms the thread is allowed to play before forcing yield (pre-emptive scheduling)
+	bool threadSleep; //checks if user wants the thread to sleep after running
+	int sleepTime; //time in ms that Cleo sleeps before waking
 }cleoThread;
 
 extern cleoThread catArray[maxThreads]; //catArray is an array size maxThreads containing cleoThread

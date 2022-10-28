@@ -1,0 +1,7 @@
+- changed SLEEPING to WAKING in kernelCore
+- comment changes to thread states
+- added SysTick function to threadsCore.h
+- added SysTick_Config to generate interrupt every millisecond in void(main)
+- refer to https://www.keil.com/pack/doc/CMSIS/Core/html/group__SysTick__gr.html
+- void SysTick_Handler:
+	- code to yield 8 registers instead of 16 (taken from osYield)

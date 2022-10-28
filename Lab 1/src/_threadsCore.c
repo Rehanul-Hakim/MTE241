@@ -83,27 +83,62 @@ int createThread (void (*task)(void* args))
 	return -1;
 }
 
+//Timer that decrements every ms
 void SysTick_Handler(void)
 {
-	
-	/*
-	Calls scheduler function to determine which thread to run
-	next and trigger PendSV
-	*/
-	//cleoIndex will only be -1 when it's the very first time running, if it's 
-	//the first time running storing and setting status does not happen
-	if (cleoIndex >= 0)
-		{
-		// save a useful offset of the current thread's stack pointer somewhere so it can be accessed again
-		catArray[cleoIndex].status = WAKING;	
-		// moving the task pointer down to allocate space for 8 registers to be stored by the handler
-		catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
+	int i;
+	for (i = 0; i < cleoNums-1; ++i){
+		if (catArray[i].status == SLEEPING && catArray[i].sleepTime > 0) {
+			catArray[i].sleepTime = catArray[i].sleepTime - 1;
 		}
-	//go to the next task in the array, if we are at the end, loop back to the beginning
-	cleoIndex = (cleoIndex+1)%(cleoNums);
-	//set the new current task to running/playing
-	catArray[cleoIndex].status = PLAYING;
-	// trigger the PendSV interrupt
-	ICSR |= 1 << 28;
-	__asm("isb");
+		else if (catArray[i].status == SLEEPING && catArray[i].sleepTime == 0) {
+			catArray[i].status = WAKING;
+		}
+		else if (catArray[i].status == PLAYING && catArray[i].playTime > 0) {
+			catArray[i].playTime = catArray[i].playTime - 1;
+		}
+		else if (catArray[i].status == PLAYING && catArray[i].playTime == 0) {
+			//check if thread becomes SLEEPING or WAKING after done RUNNING
+			if (catArray[i].threadSleep == true) {
+				//sets the thread's status to sleeping
+				cleoSleep(i);
+			}
+			else{
+				//sets the thread's status to waking
+				catArray[i].status = WAKING;
+				//moving the task pointer down to allocate space for 8 registers to be stored by the handler
+				catArray[i].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
+				//variable to store the original index to be checked
+				int originalIndex = i;
+				//go to the next task in the array, if we are at the end, loop back to the beginning
+				i = (i+1)%(cleoNums);	
+				//set the new current task to running/playing
+				while (catArray[i].status != WAKING && originalIndex != i){
+					i = (i+1)%(cleoNums);				
+				}
+				catArray[i].status = PLAYING;
+				//trigger the PendSV interrupt
+				ICSR |= 1 << 28;
+				__asm("isb");
+			}				
+		}
+	}
+}
+
+//Idle thread that will run when either all threads are sleeping or there are no threads
+void osIdleTask(void* args)
+{
+	while(1)
+	{
+		printf("In task 0\n");
+		osYield();
+	}
+}
+
+//Changing a thread's state to sleep
+void cleoSleep(int sleepIndex)
+{
+	catArray[sleepIndex].status = SLEEPING; //set the thread to sleep
+	catArray[sleepIndex].sleepTime = 5000; //Cleo will sleep for 5 seconds before waking
+	osYield(); //call yield to run next thread
 }
