@@ -10,4 +10,7 @@ void kernel_start(void);
 //this performs the task/context switching
 int task_switch(void);
 
+//Idle thread
+void osIdleTask();
+
 #endif

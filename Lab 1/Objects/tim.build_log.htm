@@ -29,18 +29,21 @@ Project File Date:  09/16/2022
 Rebuild target 'Target 1'
 compiling Retarget.c...
 compiling p1_main.c...
+src\_kernelCore.h(14): warning:  #1295-D: Deprecated declaration osIdleTask - give arg types
+  void osIdleTask();
+src\p1_main.c: 1 warning, 0 errors
 compiling uart.c...
 assembling svc_call.s...
 compiling _threadsCore.c...
 assembling startup_LPC17xx.s...
 compiling _kernelCore.c...
+src\_kernelCore.h(14): warning:  #1295-D: Deprecated declaration osIdleTask - give arg types
+  void osIdleTask();
+src\_kernelCore.c: 1 warning, 0 errors
 compiling system_LPC17xx.c...
 linking...
-.\Objects\tim.axf: Error: L6200E: Symbol osIdleTask multiply defined (by _threadscore.o and p1_main.o).
-Not enough information to list image symbols.
-Not enough information to list load addresses in the image map.
-Finished: 2 information, 0 warning and 1 error messages.
-".\Objects\tim.axf" - 1 Error(s), 0 Warning(s).
+Program Size: Code=3400 RO-data=276 RW-data=72 ZI-data=16800  
+".\Objects\tim.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -68,11 +71,10 @@ Package Vendor: Keil
 
    * Component: Keil::Device:Startup:1.0.0
       Source file:   Device\Source\system_LPC17xx.c
-      Include file:  Device\Include\LPC17xx.h
       Include file:  RTE_Driver\Config\RTE_Device.h
       Source file:   Device\Source\ARM\startup_LPC17xx.s
-Target not created.
-Build Time Elapsed:  00:00:00
+      Include file:  Device\Include\LPC17xx.h
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>

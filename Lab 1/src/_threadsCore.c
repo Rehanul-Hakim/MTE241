@@ -38,10 +38,12 @@ void setThreadingWithPSP(uint32_t* threadStack)
 }
 
 //creating a new thread, returns index of new thread if successful, returns -1 if array is full
-int createThread (void (*task)(void* args))
+int createThread (void (*task)(void* args), bool isSleep)
 {
 	if (cleoNums < maxThreads)
 	{
+		//if user wants the thread to sleep after running or not
+		catArray[cleoNums].threadSleep = isSleep;
 		catArray[cleoNums].threadFunc = task;
 		//before the thread is created, the status is set to waiting/sleeping
 		catArray[cleoNums].status = SLEEPING;
@@ -103,35 +105,16 @@ void SysTick_Handler(void)
 				//sets the thread's status to sleeping
 				cleoSleep(i);
 			}
-			else{
-				//sets the thread's status to waking
-				catArray[i].status = WAKING;
-				//moving the task pointer down to allocate space for 8 registers to be stored by the handler
-				catArray[i].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
-				//variable to store the original index to be checked
-				int originalIndex = i;
-				//go to the next task in the array, if we are at the end, loop back to the beginning
-				i = (i+1)%(cleoNums);	
-				//set the new current task to running/playing
-				while (catArray[i].status != WAKING && originalIndex != i){
-					i = (i+1)%(cleoNums);				
+			else {
+				//only initiate context switch if mutex is true
+				//i.e resources are available to be used by the os
+				//if false, then we're in the middle of doing 
+				//something with yield, and should not be interrupted
+				if (mutex == true) {
+					osYield(8);			
 				}
-				catArray[i].status = PLAYING;
-				//trigger the PendSV interrupt
-				ICSR |= 1 << 28;
-				__asm("isb");
 			}				
 		}
-	}
-}
-
-//Idle thread that will run when either all threads are sleeping or there are no threads
-void osIdleTask(void* args)
-{
-	while(1)
-	{
-		printf("In task 0\n");
-		osYield();
 	}
 }
 
@@ -140,5 +123,5 @@ void cleoSleep(int sleepIndex)
 {
 	catArray[sleepIndex].status = SLEEPING; //set the thread to sleep
 	catArray[sleepIndex].sleepTime = 5000; //Cleo will sleep for 5 seconds before waking
-	osYield(); //call yield to run next thread
+	osYield(8); //call yield to run next thread
 }

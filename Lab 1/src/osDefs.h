@@ -38,8 +38,9 @@ extern cleoThread catArray[maxThreads]; //catArray is an array size maxThreads c
 extern int cleoNums; //current number of threads created
 extern int cleoPlaying; //number of threads currently running
 extern int cleoIndex; //the index of the current running thread
+extern bool mutex; //check if resources are available for interrupt
 
-void osYield(void);	//pre-loads memory with important information to avoid problem of bootstrapping (context switch)
+void osYield(int registerShift);	//pre-loads memory with important information to avoid problem of bootstrapping (context switch)
 
 //threadsCore funtions that both _kernelCore.c and _threadsCore.c need
 //Sets the value of PSP to threadStack and ensures that the microcontroller is using that value by changing the CONTROL register
