@@ -32,7 +32,7 @@ void task1(void* args)
 	{
 		x++;
 		printf("In task 1. x is: %d\n", x);
-		cleoSleep(5000);
+		cleoSleep(3);
 	}
 }
 
@@ -43,7 +43,7 @@ void task2(void* args)
 	{
 		y++;
 		printf("In task 2. y is: %d\n", y);
-		cleoSleep(3000);
+		cleoSleep(5);
 	}
 }
 
@@ -54,7 +54,7 @@ void task3(void* args)
 	{
 		z++;
 		printf("In task 3. z is: %d\n", z);
-		cleoSleep(7000);
+		cleoSleep(7);
 	}
 }
 

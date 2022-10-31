@@ -43,8 +43,8 @@ int createThread (void (*task)(void* args))
 	if (cleoNums < maxThreads)
 	{
 		catArray[cleoNums].threadFunc = task;
-		//before the thread is created, the status is set to waiting/sleeping
-		catArray[cleoNums].status = SLEEPING;
+		//before the thread is created, the status is set to waking
+		catArray[cleoNums].status = WAKING;
 		//getting stack pointer to the beginning of thread, under the stack reserved for handler mode and existing threads
 		uint32_t* sp = getNewThreadStack((cleoNums + 1)*threadStackSize);
 
@@ -97,16 +97,13 @@ void SysTick_Handler(void)
 		else if (catArray[i].status == PLAYING && catArray[i].playTime > 0) {
 			catArray[i].playTime = catArray[i].playTime - 1;
 		}
-		else if (catArray[i].status == PLAYING && catArray[i].playTime == 0) {
+		else if (mutex == true && catArray[i].status == PLAYING && catArray[i].playTime == 0) {
 			//only initiate context switch if mutex is true
 			//i.e resources are available to be used by the os
-			if (mutex == true) {
-				//os is now using resources, so mutex is false
-				mutex = false;
-				catArray[i].status = WAKING;	
-				// moving the task pointer down to allocate space for 8 registers to be stored by the handler
-				catArray[i].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
-			}
+			mutex = false;
+			catArray[i].status = WAKING;	
+			// moving the task pointer down to allocate space for 8 registers to be stored by the handler
+			catArray[i].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
 			//variable to store the original index to be checked
 			int originalIndex = i;
 			//go to the next task in the array, if we are at the end, loop back to the beginning
@@ -119,21 +116,21 @@ void SysTick_Handler(void)
 			if (originalIndex == i && catArray[i].status == SLEEPING) {
 				osIdleTask();
 			}
-			//if a thread is found that has the status WAKING
 			else {
+				//if a thread is found that has the status WAKING
 				//setting the status to PLAYING
 				catArray[cleoIndex].status = PLAYING;
 				//cleo will play for max 7 seconds before being switched
-				catArray[cleoIndex].playTime = 7000;
-				//os is done using resources, so mutex is true
-				mutex = true;
+				catArray[cleoIndex].playTime = 50;
+				//os is done using resources
+				mutex = false;
 				//trigger the PendSV interrupt
 				ICSR |= 1 << 28;
 				__asm("isb");
-			}		
+			}
 		}
-	}				
-}
+	}
+}				
 
 //Changing a thread's state to sleep
 void cleoSleep(int userSleepTime)

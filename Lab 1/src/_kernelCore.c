@@ -28,11 +28,13 @@ void osYield()
 	mutex = false;
 	//cleoIndex will only be -1 when it's the very first time running, if it's 
 	//the first time running storing and setting status does not happen
-	if (catArray[cleoIndex].status != SLEEPING) {	//if thread is sleeping, it wont be set to waking immediately
+	if (cleoIndex >= 0) {	//if thread is sleeping, it wont be set to waking immediately
+		if (catArray[cleoIndex].status != SLEEPING) {
 		catArray[cleoIndex].status = WAKING;	
+		}
+		// moving the task pointer down to allocate space for 16 registers to be stored by the handler
+		catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 16*4);
 	}
-	// moving the task pointer down to allocate space for 16 registers to be stored by the handler
-	catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 16*4);
 	//variable to store the original index to be checked
 	int originalIndex = cleoIndex;
 	//go to the next task in the array, if we are at the end, loop back to the beginning
@@ -50,7 +52,7 @@ void osYield()
 		//setting the status to PLAYING
 		catArray[cleoIndex].status = PLAYING;
 		//cleo will play for max 7 seconds before being switched
-		catArray[cleoIndex].playTime = 7000;
+		catArray[cleoIndex].playTime = 50;
 		//os is done using resources, so mutex is true
 		mutex = true;
 		//trigger the PendSV interrupt
@@ -63,6 +65,8 @@ void osYield()
 //thread, and switches SP to PSP
 void kernel_start(void)
 {
+	//create the idle task
+	createThread(osIdleTask);
 	//is there a thread to run? if yes:
 	if (cleoNums > 0) {
 		//telling the yield function that this is the first thread we are creating
@@ -85,6 +89,8 @@ int task_switch(void)
 //Idle thread that will run when either all threads are sleeping or there are no threads
 void osIdleTask()
 {
-	printf("In idle.\n");
-	osYield();
+	while (1) {
+		printf("In idle.\n");
+		osYield();
+	}
 }

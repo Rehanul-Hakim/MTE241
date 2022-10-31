@@ -147,18 +147,34 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>5</LineNumber>
+          <LineNumber>129</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>532</Address>
+          <Address>1630</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>\\ecfile1.uwaterloo.ca\j2253che\ecfile1.uwaterloo.ca\j2253che\My Documents\MTE241\Lab 1\src\svc_call.s</Filename>
+          <Filename>\ecfile1.uwaterloo.ca\j2253che\My Documents\MTE241\Lab 1\src\_threadsCore.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\tim\src/svc_call.s\5</Expression>
+          <Expression>\\tim\src/_threadsCore.c\129</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>123</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>.\src\_threadsCore.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
         </Bp>
       </Breakpoint>
       <Tracepoint>

@@ -39,11 +39,11 @@ extern int cleoPlaying; //number of threads currently running
 extern int cleoIndex; //the index of the current running thread
 extern bool mutex; //check if resources are available for interrupt
 
-void osYield();	//pre-loads memory with important information to avoid problem of bootstrapping (context switch)
-void osIdleTask();	//Idle thread
-
 //threadsCore funtions that both _kernelCore.c and _threadsCore.c need
 //Sets the value of PSP to threadStack and ensures that the microcontroller is using that value by changing the CONTROL register
 void setThreadingWithPSP(uint32_t* threadStack); 
+void osYield();	//pre-loads memory with important information to avoid problem of bootstrapping (context switch)
+void osIdleTask();	//Idle thread
+int createThread (void (*task)(void* args));	//Sets up the threads
 
 #endif
