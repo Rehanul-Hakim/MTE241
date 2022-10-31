@@ -30,7 +30,6 @@ typedef struct thread_struct{
 	uint32_t* taskPointer;	//stack pointer for this task
 	int status;	//Cleo cat thread state
 	int playTime; //time in ms the thread is allowed to play before forcing yield (pre-emptive scheduling)
-	bool threadSleep; //checks if user wants the thread to sleep after running
 	int sleepTime; //time in ms that Cleo sleeps before waking
 }cleoThread;
 
@@ -40,7 +39,8 @@ extern int cleoPlaying; //number of threads currently running
 extern int cleoIndex; //the index of the current running thread
 extern bool mutex; //check if resources are available for interrupt
 
-void osYield(int registerShift);	//pre-loads memory with important information to avoid problem of bootstrapping (context switch)
+void osYield();	//pre-loads memory with important information to avoid problem of bootstrapping (context switch)
+void osIdleTask();	//Idle thread
 
 //threadsCore funtions that both _kernelCore.c and _threadsCore.c need
 //Sets the value of PSP to threadStack and ensures that the microcontroller is using that value by changing the CONTROL register

@@ -23,6 +23,7 @@
 
 int x = 0;
 int y = 0;
+int z = 0;
 
 //Creating task 1
 void task1(void* args)
@@ -31,7 +32,7 @@ void task1(void* args)
 	{
 		x++;
 		printf("In task 1. x is: %d\n", x);
-		osYield(16);
+		cleoSleep(5000);
 	}
 }
 
@@ -42,7 +43,7 @@ void task2(void* args)
 	{
 		y++;
 		printf("In task 2. y is: %d\n", y);
-		osYield(16);
+		cleoSleep(3000);
 	}
 }
 
@@ -51,8 +52,9 @@ void task3(void* args)
 {
 	while(1)
 	{
-		printf("In task 0\n");
-		osYield(16);
+		z++;
+		printf("In task 3. z is: %d\n", z);
+		cleoSleep(7000);
 	}
 }
 
@@ -78,9 +80,9 @@ int main( void )
 	kernelInit();
 	
 	//Setting up the threads
-	createThread(task1, false);
-	createThread(task2, true);
-	createThread(task3, false);
+	createThread(task1);
+	createThread(task2);
+	createThread(task3);
 	
 	//Start the kernel, which will run the first thread
 	kernel_start();

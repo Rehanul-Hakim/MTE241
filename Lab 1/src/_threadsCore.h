@@ -11,12 +11,12 @@ uint32_t* getMSPInitialLocation(void);
 uint32_t* getNewThreadStack(uint32_t offset); 
 
 //Sets up the threads
-int createThread (void (*task)(void* args), bool isSleep);
+int createThread (void (*task)(void* args));
 
 //Using SysTick to context switch
 void SysTick_Handler(void);
 
 //Function that turns the thread's state to sleep
-void cleoSleep(int sleepIndex);
+void cleoSleep(int userSleepTime);
 
 #endif

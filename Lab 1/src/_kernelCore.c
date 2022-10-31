@@ -22,21 +22,17 @@ void kernelInit(void)
 }
 
 //called by the kernel to schedule which threads to run
-void osYield(int registerShift)	
+void osYield()	
 {
 	//os is now using resources, so mutex is false
 	mutex = false;
 	//cleoIndex will only be -1 when it's the very first time running, if it's 
 	//the first time running storing and setting status does not happen
-	if (cleoIndex >= 0)
-		{
-		//if user doesn't want the thread to sleep after PLAYING
-		if (catArray[cleoIndex].threadSleep != true) {
-			catArray[cleoIndex].status = WAKING;	
-		}
-		// moving the task pointer down to allocate space for 16 registers to be stored by the handler
-		catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - registerShift*4);
-		}
+	if (catArray[cleoIndex].status != SLEEPING) {	//if thread is sleeping, it wont be set to waking immediately
+		catArray[cleoIndex].status = WAKING;	
+	}
+	// moving the task pointer down to allocate space for 16 registers to be stored by the handler
+	catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 16*4);
 	//variable to store the original index to be checked
 	int originalIndex = cleoIndex;
 	//go to the next task in the array, if we are at the end, loop back to the beginning
@@ -74,7 +70,7 @@ void kernel_start(void)
 		//set to threading mode, and set the stack pointer to the beginning of the first thread we are creating
 		setThreadingWithPSP(catArray[0].taskPointer);
 		//run the context switching so the first thread starts running
-		osYield(16);
+		osYield();
 	}
 }
 
@@ -89,9 +85,6 @@ int task_switch(void)
 //Idle thread that will run when either all threads are sleeping or there are no threads
 void osIdleTask()
 {
-	while(1)
-	{
-		printf("In task 0\n");
-		osYield(16);
-	}
+	printf("In idle.\n");
+	osYield();
 }

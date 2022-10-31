@@ -38,12 +38,10 @@ void setThreadingWithPSP(uint32_t* threadStack)
 }
 
 //creating a new thread, returns index of new thread if successful, returns -1 if array is full
-int createThread (void (*task)(void* args), bool isSleep)
+int createThread (void (*task)(void* args))
 {
 	if (cleoNums < maxThreads)
 	{
-		//if user wants the thread to sleep after running or not
-		catArray[cleoNums].threadSleep = isSleep;
 		catArray[cleoNums].threadFunc = task;
 		//before the thread is created, the status is set to waiting/sleeping
 		catArray[cleoNums].status = SLEEPING;
@@ -100,28 +98,47 @@ void SysTick_Handler(void)
 			catArray[i].playTime = catArray[i].playTime - 1;
 		}
 		else if (catArray[i].status == PLAYING && catArray[i].playTime == 0) {
-			//check if thread becomes SLEEPING or WAKING after done RUNNING
-			if (catArray[i].threadSleep == true) {
-				//sets the thread's status to sleeping
-				cleoSleep(i);
+			//only initiate context switch if mutex is true
+			//i.e resources are available to be used by the os
+			if (mutex == true) {
+				//os is now using resources, so mutex is false
+				mutex = false;
+				catArray[i].status = WAKING;	
+				// moving the task pointer down to allocate space for 8 registers to be stored by the handler
+				catArray[i].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
 			}
+			//variable to store the original index to be checked
+			int originalIndex = i;
+			//go to the next task in the array, if we are at the end, loop back to the beginning
+			i = (i+1)%(cleoNums);
+			//set the new current task to running/playing
+			while (catArray[i].status != WAKING && originalIndex != i){
+				i = (i+1)%(cleoNums);				
+			}
+			//if all threads are sleeping, then run the osIdleTask function
+			if (originalIndex == i && catArray[i].status == SLEEPING) {
+				osIdleTask();
+			}
+			//if a thread is found that has the status WAKING
 			else {
-				//only initiate context switch if mutex is true
-				//i.e resources are available to be used by the os
-				//if false, then we're in the middle of doing 
-				//something with yield, and should not be interrupted
-				if (mutex == true) {
-					osYield(8);			
-				}
-			}				
+				//setting the status to PLAYING
+				catArray[cleoIndex].status = PLAYING;
+				//cleo will play for max 7 seconds before being switched
+				catArray[cleoIndex].playTime = 7000;
+				//os is done using resources, so mutex is true
+				mutex = true;
+				//trigger the PendSV interrupt
+				ICSR |= 1 << 28;
+				__asm("isb");
+			}		
 		}
-	}
+	}				
 }
 
 //Changing a thread's state to sleep
-void cleoSleep(int sleepIndex)
+void cleoSleep(int userSleepTime)
 {
-	catArray[sleepIndex].status = SLEEPING; //set the thread to sleep
-	catArray[sleepIndex].sleepTime = 5000; //Cleo will sleep for 5 seconds before waking
-	osYield(8); //call yield to run next thread
+	catArray[cleoIndex].status = SLEEPING; //set the thread to sleep
+	catArray[cleoIndex].sleepTime = userSleepTime; //Cleo will sleep for 5 seconds before waking
+	osYield(); //call yield to run next thread
 }
