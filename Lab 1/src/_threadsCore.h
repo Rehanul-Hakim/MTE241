@@ -10,10 +10,10 @@ uint32_t* getMSPInitialLocation(void);
 //Returns the address of a new PSP with offset of "offset" bytes from MSP.
 uint32_t* getNewThreadStack(uint32_t offset); 
 
-//Using SysTick to context switch
+//Using SysTick for time dependant operations and preemptive switching
 void SysTick_Handler(void);
 
-//Function that turns the thread's state to sleep
+//Function that turns the thread's state to sleep after running
 void cleoSleep(int userSleepTime);
 
 #endif

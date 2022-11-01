@@ -32,7 +32,7 @@ void task1(void* args)
 	{
 		x++;
 		printf("In task 1. x is: %d\n", x);
-		cleoSleep(3);
+		osYield();
 	}
 }
 
@@ -43,18 +43,18 @@ void task2(void* args)
 	{
 		y++;
 		printf("In task 2. y is: %d\n", y);
-		cleoSleep(5);
+		cleoSleep(10);
 	}
 }
-
+extern unsigned long counter;
 //Creating task 3
 void task3(void* args)
 {
 	while(1)
 	{
 		z++;
+		//printf("In task 3. z is: %lu\n", counter);
 		printf("In task 3. z is: %d\n", z);
-		cleoSleep(7);
 	}
 }
 
@@ -73,7 +73,7 @@ int main( void )
 	//Getting our initial stack location
 	unsigned int* mspval = getMSPInitialLocation();
 	
-	//Check what initial stack locatio is:
+	//Check what initial stack location is:
 	printf("MSP initially: %x\n",(uint32_t)mspval);
 	
 	//Initialize the kernel
