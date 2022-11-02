@@ -54,7 +54,7 @@ void osYield()
 		cleoIndex = cleoNums - 1;
 		catArray[cleoIndex].status = PLAYING;
 		//os is done using resources
-		 mutex = false;
+		mutex = true;
 		//trigger the PendSV interrupt
 		ICSR |= 1 << 28;
 		__asm("isb");
