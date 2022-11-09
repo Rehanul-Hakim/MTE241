@@ -32,7 +32,6 @@ void task1(void* args)
 	{
 		x++;
 		printf("In task 1. x is: %d\n", x);
-		osYield();
 	}
 }
 
@@ -43,7 +42,6 @@ void task2(void* args)
 	{
 		y++;
 		printf("In task 2. y is: %d\n", y);
-		cleoSleep(10);
 	}
 }
 extern unsigned long counter;

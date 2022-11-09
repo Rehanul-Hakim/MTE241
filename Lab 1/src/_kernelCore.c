@@ -18,25 +18,21 @@ bool mutex;
 //initializes memory structures and interrupts necessary to run the kernel
 void kernelInit(void)	
 {
-	SHPR3 |= 0xFF << 16;
+	SHPR3 |= 0xFF << 16; //set the priority of PendSV to almost the weakest
+	SHPR3 |= 0xFFU << 24; //Set the priority of SysTick to be the weakest
+	SHPR2 |= 0xFDU << 24; //Set the priority of SVC the be the strongest
 }
 
 //called by the kernel to schedule which threads to run
 void osYield()	
 {
-	//os is now using resources, so mutex is false
-	mutex = false;
-	//cleoIndex will only be -1 when it's the very first time running, if it's 
-	//the first time running storing and setting status does not happen
-	if (cleoIndex >= 0) {	
-		//if thread is sleeping, it won't be set to waking immediately
-		if (catArray[cleoIndex].status != SLEEPING) {
-		catArray[cleoIndex].status = WAKING;	
-		}
-		// moving the task pointer down to allocate space for 16 registers to be 
-		//stored by the handler
-		catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 16*4);
-	}
+	//Trigger the SVC right away.
+	__ASM("SVC #0");
+}
+
+//cleoScheduler determines which task to run next
+void cleoScheduler()
+{
 	//variable to store the original index
 	int originalIndex = cleoIndex;
 	//go to the next task in the array, if we are at the end, loop back to 
@@ -53,11 +49,6 @@ void osYield()
 		//the idle task is always at the end of the array
 		cleoIndex = cleoNums - 1;
 		catArray[cleoIndex].status = PLAYING;
-		//os is done using resources
-		mutex = true;
-		//trigger the PendSV interrupt
-		ICSR |= 1 << 28;
-		__asm("isb");
 	}
 	//if a thread is found that has the status WAKING
 	else {
@@ -65,11 +56,33 @@ void osYield()
 		catArray[cleoIndex].status = PLAYING;
 		//cleo will play for max 500 ms seconds before being switched
 		catArray[cleoIndex].playTime = cleoPlayTime;
-		//os is done using resources, so mutex is true
-		mutex = true;
-		//trigger the PendSV interrupt
-		ICSR |= 1 << 28;
-		__asm("isb");
+	}
+}
+
+//SVC_Handler_Main gets the value of the system call's immediate
+void SVC_Handler_Main(uint32_t *svc_args)
+{
+	char call = ((char*)svc_args[6])[-2];
+	if (call == YIELD_SWITCH) 
+	{
+		//cleoIndex will only be -1 when it's the very first time running, if it's 
+		//the first time running storing and setting status does not happen
+		if (cleoIndex >= 0) 
+			{	
+				//if thread is sleeping, it won't be set to waking immediately
+				if (catArray[cleoIndex].status != SLEEPING)
+				{
+					catArray[cleoIndex].status = WAKING;	
+				}
+				// moving the task pointer down to allocate space for 16 registers to be 
+				//stored by the handler
+				catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
+			}
+			//run the scheduler
+			cleoScheduler();
+			//trigger the PendSV interrupt
+			ICSR |= 1 << 28;
+			__asm("isb");
 	}
 }
 

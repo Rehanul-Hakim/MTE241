@@ -110,46 +110,16 @@ void SysTick_Handler(void)
 		}
 		//if the thread is playing and timer is 0, only start performing the context
 		//switch if the mutex is true (meaning resources are available)
-		else if (mutex == true && catArray[i].status == PLAYING && catArray[i].playTime == 0) {
+		else if (catArray[i].status == PLAYING && catArray[i].playTime == 0) {
 			//set the mutex to false since os is now using the resources
-			mutex = false;
+			//mutex = false;
 			catArray[i].status = WAKING;	
 			//moving the task pointer down to allocate space for 8 registers to be stored by the handler
 			catArray[i].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
-			//variable to store the original index
-			int originalIndex = i;
-			//go to the next task in the array, if we are at the end, loop back to the beginning
-			i = (i+1)%(cleoNums);
-			//if the thread we are at is not waking, then go to the next thread
-			//also check if we already checked the entire array and we are back at the beginning
-			while (catArray[i].status != WAKING && originalIndex != i){
-				i = (i+1)%(cleoNums);			
-			}
-			//if all threads are sleeping, then run the idle task thread 
-			if (originalIndex == i && catArray[i].status == SLEEPING) {
-				//set the index to where the idle task is
-				//the idle task is always at the end of the array
-				cleoIndex = cleoNums - 1;
-				catArray[cleoIndex].status = PLAYING;
-				//os is done using resources
-		  		mutex = true;
-				//trigger the PendSV interrupt
-				ICSR |= 1 << 28;
-				__asm("isb");
-			}
-			else {
-				cleoIndex = i;
-				//if a thread is found that has the status WAKING
-				catArray[cleoIndex].status = PLAYING;
-				//cleo will play for the cleoPlayTime
-				//before being switched
-				catArray[cleoIndex].playTime = cleoPlayTime;
-				//os is done using resources, so mutex is true
-				mutex = true;
-				//trigger the PendSV interrupt
-				ICSR |= 1 << 28;
-				__asm("isb");
-			}
+			cleoScheduler();
+			//trigger the PendSV interrupt
+			ICSR |= 1 << 28;
+			__asm("isb");
 		}
 	}
 }				
