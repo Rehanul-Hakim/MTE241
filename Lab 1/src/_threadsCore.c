@@ -41,7 +41,7 @@ void setThreadingWithPSP(uint32_t* threadStack)
 }
 
 //creating a new thread, returns index of new thread if successful, returns -1 if array is full
-int createThread (void (*task)(void* args))
+int createThread (void (*task)(void* args), uint32_t setDinner)
 {
 	if (cleoNums < maxThreads)
 	{
@@ -82,6 +82,7 @@ int createThread (void (*task)(void* args))
 		//the new thread in the array 
 		cleoNums++;
 		cleoPlaying++;
+		catArray[cleoNums].dinnerTime = setDinner;
 		return cleoNums-1;
 	} 
 	return -1;
@@ -96,8 +97,12 @@ void SysTick_Handler(void)
 	//timers every ms and changes their status when appropriate
 	int i;
 	for (i = 0; i < cleoNums-1; ++i){
+		//for every thread that's not sleeping, decrement its deadline timer
+		if (catArray[i].status != SLEEPING) {
+			catArray[i].timeTilDinner = catArray[i].timeTilDinner - 1;
+		}
 		//if the thread is sleeping and timer is not 0, decrement the sleep timer
-		if (catArray[i].status == SLEEPING && catArray[i].sleepTime > 0) {
+		else if (catArray[i].status == SLEEPING && catArray[i].sleepTime > 0) {
 			catArray[i].sleepTime = catArray[i].sleepTime - 1;
 		}
 		//if the thread is sleeping and timer is 0, set the status to waking

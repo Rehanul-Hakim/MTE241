@@ -38,6 +38,8 @@ typedef struct thread_struct{
 	int status;	//Cleo cat thread state
 	int playTime; //time in ms the thread is allowed to play before forcing yield (pre-emptive scheduling)
 	int sleepTime; //time in ms that Cleo sleeps before waking
+	uint32_t dinnerTime; //cleo's dinner time (deadline/period)
+	uint32_t timeTilDinner; //time that Cleo has left before dinner (deceremented deadline time)
 }cleoThread;
 
 extern cleoThread catArray[maxThreads]; //catArray is an array size maxThreads containing cleoThread
@@ -50,7 +52,7 @@ extern bool mutex; //check if resources are available for interrupt
 void setThreadingWithPSP(uint32_t* threadStack); //Sets value of PSP to threadStack and changes the CONTROL register
 void osYield();	//pre-loads memory with important information to avoid problem of bootstrapping (context switch)
 void osIdleTask(); //Idle thread
-int createThread (void (*task)(void* args)); //Sets up the threads
+int createThread (void (*task)(void* args), uint32_t setDinner); //Sets up the threads
 
 void SVC_Handler_Main(uint32_t *svc_args); //get the value of the system call's immediate
 void cleoScheduler(); //determine which task to run next

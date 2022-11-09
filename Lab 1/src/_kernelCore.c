@@ -30,31 +30,36 @@ void osYield()
 	__ASM("SVC #0");
 }
 
-//cleoScheduler determines which task to run next
+//cleoScheduler determines which task to run next by checking all deadlines
 void cleoScheduler()
 {
-	//variable to store the original index
-	int originalIndex = cleoIndex;
-	//go to the next task in the array, if we are at the end, loop back to 
-	//the beginning
-	cleoIndex = (cleoIndex+1)%(cleoNums);
-	//if the thread we are at is not waking, then go to the next thread
-	//also check if we already checked the entire array and we are back at the beginning
-	while (catArray[cleoIndex].status != WAKING && originalIndex != cleoIndex){
-		cleoIndex = (cleoIndex+1)%(cleoNums);				
+	int i;
+	int closestToDinner = 0; //stores index of thread with closest deadline
+	bool foundCat = false; //if there is a potential "WAKING" thread to run next
+	//iterate through all the threads and check their deadlines
+	for (i = 0; i < cleoNums-1; ++i){
+		//check if there is a thread with a closer deadline approaching that must run first
+		//and that thread cannot be sleeping
+		if (catArray[i].dinnerTime < catArray[closestToDinner].dinnerTime && catArray[i].status != SLEEPING)
+		{
+			closestToDinner = i;
+			foundCat = true; //there has been a thread found to run next
+		}
 	}
-	//if all threads are sleeping, then run the idle task thread
-	if (originalIndex == cleoIndex && catArray[cleoIndex].status == SLEEPING) {
-		//set the index to where the idle task is to run idle
-		//the idle task is always at the end of the array
+	if (foundCat == false) //if all threads are sleeping
+	{
+		//go to the idle task, which is always at the end
 		cleoIndex = cleoNums - 1;
+		//run the idle task
 		catArray[cleoIndex].status = PLAYING;
 	}
-	//if a thread is found that has the status WAKING
-	else {
-		//setting the status to PLAYING
+	else 
+	{
+		//the current index will go to the thread with closest deadline
+		cleoIndex = closestToDinner;
+		//run closest deadline thread
 		catArray[cleoIndex].status = PLAYING;
-		//cleo will play for max 500 ms seconds before being switched
+		//set the playtime for this thread
 		catArray[cleoIndex].playTime = cleoPlayTime;
 	}
 }
@@ -91,7 +96,7 @@ void SVC_Handler_Main(uint32_t *svc_args)
 void kernel_start(void)
 {
 	//create the idle task as the last thread in the array
-	createThread(osIdleTask);
+	createThread(osIdleTask, 349580439); //THIS IS TEMP VALUE LOL MUST FIX!!!!!!!!!!!
 	//is there a thread to run? if yes:
 	if (cleoNums > 0) {
 		//telling the yield function that this is the first thread we are creating

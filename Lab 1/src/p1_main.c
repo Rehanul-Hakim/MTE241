@@ -78,9 +78,9 @@ int main( void )
 	kernelInit();
 	
 	//Setting up the threads
-	createThread(task1);
-	createThread(task2);
-	createThread(task3);
+	createThread(task1, 30);
+	createThread(task2, 50);
+	createThread(task3, 70);
 	
 	//Start the kernel, which will run the first thread
 	kernel_start();

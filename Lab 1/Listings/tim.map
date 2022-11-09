@@ -80,8 +80,8 @@ Section Cross References
     _kernelcore.o(i.SVC_Handler_Main) refers to _kernelcore.o(i.cleoScheduler) for cleoScheduler
     _kernelcore.o(i.SVC_Handler_Main) refers to _kernelcore.o(.data) for cleoIndex
     _kernelcore.o(i.SVC_Handler_Main) refers to _threadscore.o(.bss) for catArray
-    _kernelcore.o(i.cleoScheduler) refers to _kernelcore.o(.data) for cleoIndex
     _kernelcore.o(i.cleoScheduler) refers to _threadscore.o(.bss) for catArray
+    _kernelcore.o(i.cleoScheduler) refers to _kernelcore.o(.data) for cleoNums
     _kernelcore.o(i.kernel_start) refers to _threadscore.o(i.createThread) for createThread
     _kernelcore.o(i.kernel_start) refers to _threadscore.o(i.setThreadingWithPSP) for setThreadingWithPSP
     _kernelcore.o(i.kernel_start) refers to _kernelcore.o(i.osYield) for osYield
@@ -458,34 +458,34 @@ Image Symbol Table
     i.FreeSnd                                0x000004e4   Section        0  uart.o(i.FreeSnd)
     i.SVC_Handler_Main                       0x00000508   Section        0  _kernelcore.o(i.SVC_Handler_Main)
     i.SysTick_Handler                        0x0000057c   Section        0  _threadscore.o(i.SysTick_Handler)
-    i.SystemInit                             0x00000698   Section        0  system_lpc17xx.o(i.SystemInit)
-    i.UART0_IRQHandler                       0x000007d8   Section        0  uart.o(i.UART0_IRQHandler)
-    i.UART1_IRQHandler                       0x00000840   Section        0  uart.o(i.UART1_IRQHandler)
-    i.UARTInit                               0x000008b0   Section        0  uart.o(i.UARTInit)
-    i.UARTSendChar                           0x0000096c   Section        0  uart.o(i.UARTSendChar)
-    i.__NVIC_EnableIRQ                       0x00000990   Section        0  uart.o(i.__NVIC_EnableIRQ)
-    __NVIC_EnableIRQ                         0x00000991   Thumb Code    34  uart.o(i.__NVIC_EnableIRQ)
-    i.cleoScheduler                          0x000009b4   Section        0  _kernelcore.o(i.cleoScheduler)
-    i.createThread                           0x00000a68   Section        0  _threadscore.o(i.createThread)
-    i.ferror                                 0x00000b60   Section        0  retarget.o(i.ferror)
-    i.fputc                                  0x00000b68   Section        0  retarget.o(i.fputc)
-    i.getFrequency                           0x00000b78   Section        0  uart.o(i.getFrequency)
-    i.getMSPInitialLocation                  0x00000bc0   Section        0  _threadscore.o(i.getMSPInitialLocation)
-    i.getNewThreadStack                      0x00000bc6   Section        0  _threadscore.o(i.getNewThreadStack)
-    i.kernelInit                             0x00000be8   Section        0  _kernelcore.o(i.kernelInit)
-    i.kernel_start                           0x00000c10   Section        0  _kernelcore.o(i.kernel_start)
-    i.main                                   0x00000c48   Section        0  p1_main.o(i.main)
-    i.osIdleTask                             0x00000d08   Section        0  _kernelcore.o(i.osIdleTask)
-    i.osYield                                0x00000d10   Section        0  _kernelcore.o(i.osYield)
-    i.sendchar                               0x00000d18   Section        0  retarget.o(i.sendchar)
-    i.setThreadingWithPSP                    0x00000d5c   Section        0  _threadscore.o(i.setThreadingWithPSP)
-    i.task1                                  0x00000d74   Section        0  p1_main.o(i.task1)
-    i.task2                                  0x00000da8   Section        0  p1_main.o(i.task2)
-    i.task3                                  0x00000ddc   Section        0  p1_main.o(i.task3)
-    i.task_switch                            0x00000e10   Section        0  _kernelcore.o(i.task_switch)
-    .constdata                               0x00000e34   Section       40  _printf_hex_int.o(.constdata)
-    uc_hextab                                0x00000e34   Data          20  _printf_hex_int.o(.constdata)
-    lc_hextab                                0x00000e48   Data          20  _printf_hex_int.o(.constdata)
+    i.SystemInit                             0x000006c4   Section        0  system_lpc17xx.o(i.SystemInit)
+    i.UART0_IRQHandler                       0x00000804   Section        0  uart.o(i.UART0_IRQHandler)
+    i.UART1_IRQHandler                       0x0000086c   Section        0  uart.o(i.UART1_IRQHandler)
+    i.UARTInit                               0x000008dc   Section        0  uart.o(i.UARTInit)
+    i.UARTSendChar                           0x00000998   Section        0  uart.o(i.UARTSendChar)
+    i.__NVIC_EnableIRQ                       0x000009bc   Section        0  uart.o(i.__NVIC_EnableIRQ)
+    __NVIC_EnableIRQ                         0x000009bd   Thumb Code    34  uart.o(i.__NVIC_EnableIRQ)
+    i.cleoScheduler                          0x000009e0   Section        0  _kernelcore.o(i.cleoScheduler)
+    i.createThread                           0x00000a78   Section        0  _threadscore.o(i.createThread)
+    i.ferror                                 0x00000b84   Section        0  retarget.o(i.ferror)
+    i.fputc                                  0x00000b8c   Section        0  retarget.o(i.fputc)
+    i.getFrequency                           0x00000b9c   Section        0  uart.o(i.getFrequency)
+    i.getMSPInitialLocation                  0x00000be4   Section        0  _threadscore.o(i.getMSPInitialLocation)
+    i.getNewThreadStack                      0x00000bea   Section        0  _threadscore.o(i.getNewThreadStack)
+    i.kernelInit                             0x00000c0c   Section        0  _kernelcore.o(i.kernelInit)
+    i.kernel_start                           0x00000c34   Section        0  _kernelcore.o(i.kernel_start)
+    i.main                                   0x00000c70   Section        0  p1_main.o(i.main)
+    i.osIdleTask                             0x00000d38   Section        0  _kernelcore.o(i.osIdleTask)
+    i.osYield                                0x00000d40   Section        0  _kernelcore.o(i.osYield)
+    i.sendchar                               0x00000d48   Section        0  retarget.o(i.sendchar)
+    i.setThreadingWithPSP                    0x00000d8c   Section        0  _threadscore.o(i.setThreadingWithPSP)
+    i.task1                                  0x00000da4   Section        0  p1_main.o(i.task1)
+    i.task2                                  0x00000dd8   Section        0  p1_main.o(i.task2)
+    i.task3                                  0x00000e0c   Section        0  p1_main.o(i.task3)
+    i.task_switch                            0x00000e40   Section        0  _kernelcore.o(i.task_switch)
+    .constdata                               0x00000e64   Section       40  _printf_hex_int.o(.constdata)
+    uc_hextab                                0x00000e64   Data          20  _printf_hex_int.o(.constdata)
+    lc_hextab                                0x00000e78   Data          20  _printf_hex_int.o(.constdata)
     .data                                    0x10000000   Section       12  p1_main.o(.data)
     .data                                    0x1000000c   Section       12  retarget.o(.data)
     .data                                    0x10000018   Section       32  uart.o(.data)
@@ -493,13 +493,13 @@ Image Symbol Table
     .data                                    0x1000003c   Section       13  _kernelcore.o(.data)
     .data                                    0x1000004c   Section        4  system_lpc17xx.o(.data)
     .bss                                     0x10000050   Section      128  uart.o(.bss)
-    .bss                                     0x100000d0   Section      160  _threadscore.o(.bss)
-    .bss                                     0x10000170   Section       96  libspace.o(.bss)
-    HEAP                                     0x100001d0   Section     8192  startup_lpc17xx.o(HEAP)
-    Heap_Mem                                 0x100001d0   Data        8192  startup_lpc17xx.o(HEAP)
-    STACK                                    0x100021d0   Section     8192  startup_lpc17xx.o(STACK)
-    Stack_Mem                                0x100021d0   Data        8192  startup_lpc17xx.o(STACK)
-    __initial_sp                             0x100041d0   Data           0  startup_lpc17xx.o(STACK)
+    .bss                                     0x100000d0   Section      224  _threadscore.o(.bss)
+    .bss                                     0x100001b0   Section       96  libspace.o(.bss)
+    HEAP                                     0x10000210   Section     8192  startup_lpc17xx.o(HEAP)
+    Heap_Mem                                 0x10000210   Data        8192  startup_lpc17xx.o(HEAP)
+    STACK                                    0x10002210   Section     8192  startup_lpc17xx.o(STACK)
+    Stack_Mem                                0x10002210   Data        8192  startup_lpc17xx.o(STACK)
+    __initial_sp                             0x10004210   Data           0  startup_lpc17xx.o(STACK)
 
     Global Symbols
 
@@ -656,32 +656,32 @@ Image Symbol Table
     FreeRcv                                  0x000004c1   Thumb Code    28  uart.o(i.FreeRcv)
     FreeSnd                                  0x000004e5   Thumb Code    28  uart.o(i.FreeSnd)
     SVC_Handler_Main                         0x00000509   Thumb Code   104  _kernelcore.o(i.SVC_Handler_Main)
-    SysTick_Handler                          0x0000057d   Thumb Code   266  _threadscore.o(i.SysTick_Handler)
-    SystemInit                               0x00000699   Thumb Code   302  system_lpc17xx.o(i.SystemInit)
-    UART0_IRQHandler                         0x000007d9   Thumb Code    88  uart.o(i.UART0_IRQHandler)
-    UART1_IRQHandler                         0x00000841   Thumb Code    90  uart.o(i.UART1_IRQHandler)
-    UARTInit                                 0x000008b1   Thumb Code   176  uart.o(i.UARTInit)
-    UARTSendChar                             0x0000096d   Thumb Code    26  uart.o(i.UARTSendChar)
-    cleoScheduler                            0x000009b5   Thumb Code   166  _kernelcore.o(i.cleoScheduler)
-    createThread                             0x00000a69   Thumb Code   236  _threadscore.o(i.createThread)
-    ferror                                   0x00000b61   Thumb Code     8  retarget.o(i.ferror)
-    fputc                                    0x00000b69   Thumb Code    14  retarget.o(i.fputc)
-    getFrequency                             0x00000b79   Thumb Code    62  uart.o(i.getFrequency)
-    getMSPInitialLocation                    0x00000bc1   Thumb Code     6  _threadscore.o(i.getMSPInitialLocation)
-    getNewThreadStack                        0x00000bc7   Thumb Code    34  _threadscore.o(i.getNewThreadStack)
-    kernelInit                               0x00000be9   Thumb Code    36  _kernelcore.o(i.kernelInit)
-    kernel_start                             0x00000c11   Thumb Code    38  _kernelcore.o(i.kernel_start)
-    main                                     0x00000c49   Thumb Code   132  p1_main.o(i.main)
-    osIdleTask                               0x00000d09   Thumb Code     8  _kernelcore.o(i.osIdleTask)
-    osYield                                  0x00000d11   Thumb Code     6  _kernelcore.o(i.osYield)
-    sendchar                                 0x00000d19   Thumb Code    64  retarget.o(i.sendchar)
-    setThreadingWithPSP                      0x00000d5d   Thumb Code    24  _threadscore.o(i.setThreadingWithPSP)
-    task1                                    0x00000d75   Thumb Code    24  p1_main.o(i.task1)
-    task2                                    0x00000da9   Thumb Code    24  p1_main.o(i.task2)
-    task3                                    0x00000ddd   Thumb Code    24  p1_main.o(i.task3)
-    task_switch                              0x00000e11   Thumb Code    26  _kernelcore.o(i.task_switch)
-    Region$$Table$$Base                      0x00000e5c   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x00000e7c   Number         0  anon$$obj.o(Region$$Table)
+    SysTick_Handler                          0x0000057d   Thumb Code   310  _threadscore.o(i.SysTick_Handler)
+    SystemInit                               0x000006c5   Thumb Code   302  system_lpc17xx.o(i.SystemInit)
+    UART0_IRQHandler                         0x00000805   Thumb Code    88  uart.o(i.UART0_IRQHandler)
+    UART1_IRQHandler                         0x0000086d   Thumb Code    90  uart.o(i.UART1_IRQHandler)
+    UARTInit                                 0x000008dd   Thumb Code   176  uart.o(i.UARTInit)
+    UARTSendChar                             0x00000999   Thumb Code    26  uart.o(i.UARTSendChar)
+    cleoScheduler                            0x000009e1   Thumb Code   140  _kernelcore.o(i.cleoScheduler)
+    createThread                             0x00000a79   Thumb Code   256  _threadscore.o(i.createThread)
+    ferror                                   0x00000b85   Thumb Code     8  retarget.o(i.ferror)
+    fputc                                    0x00000b8d   Thumb Code    14  retarget.o(i.fputc)
+    getFrequency                             0x00000b9d   Thumb Code    62  uart.o(i.getFrequency)
+    getMSPInitialLocation                    0x00000be5   Thumb Code     6  _threadscore.o(i.getMSPInitialLocation)
+    getNewThreadStack                        0x00000beb   Thumb Code    34  _threadscore.o(i.getNewThreadStack)
+    kernelInit                               0x00000c0d   Thumb Code    36  _kernelcore.o(i.kernelInit)
+    kernel_start                             0x00000c35   Thumb Code    40  _kernelcore.o(i.kernel_start)
+    main                                     0x00000c71   Thumb Code   138  p1_main.o(i.main)
+    osIdleTask                               0x00000d39   Thumb Code     8  _kernelcore.o(i.osIdleTask)
+    osYield                                  0x00000d41   Thumb Code     6  _kernelcore.o(i.osYield)
+    sendchar                                 0x00000d49   Thumb Code    64  retarget.o(i.sendchar)
+    setThreadingWithPSP                      0x00000d8d   Thumb Code    24  _threadscore.o(i.setThreadingWithPSP)
+    task1                                    0x00000da5   Thumb Code    24  p1_main.o(i.task1)
+    task2                                    0x00000dd9   Thumb Code    24  p1_main.o(i.task2)
+    task3                                    0x00000e0d   Thumb Code    24  p1_main.o(i.task3)
+    task_switch                              0x00000e41   Thumb Code    26  _kernelcore.o(i.task_switch)
+    Region$$Table$$Base                      0x00000e8c   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x00000eac   Number         0  anon$$obj.o(Region$$Table)
     x                                        0x10000000   Data           4  p1_main.o(.data)
     y                                        0x10000004   Data           4  p1_main.o(.data)
     z                                        0x10000008   Data           4  p1_main.o(.data)
@@ -708,9 +708,9 @@ Image Symbol Table
     SystemCoreClock                          0x1000004c   Data           4  system_lpc17xx.o(.data)
     UART0Buffer                              0x10000050   Data          64  uart.o(.bss)
     UART1Buffer                              0x10000090   Data          64  uart.o(.bss)
-    catArray                                 0x100000d0   Data         160  _threadscore.o(.bss)
-    __libspace_start                         0x10000170   Data          96  libspace.o(.bss)
-    __temporary_stack_top$libspace           0x100001d0   Data           0  libspace.o(.bss)
+    catArray                                 0x100000d0   Data         224  _threadscore.o(.bss)
+    __libspace_start                         0x100001b0   Data          96  libspace.o(.bss)
+    __temporary_stack_top$libspace           0x10000210   Data           0  libspace.o(.bss)
 
 
 
@@ -720,9 +720,9 @@ Memory Map of the image
 
   Image Entry point : 0x00000179
 
-  Load Region LR_1 (Base: 0x00000000, Size: 0x00000ecc, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x00000000, Size: 0x00000efc, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x00000e7c, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x00000eac, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -802,60 +802,60 @@ Memory Map of the image
     0x000004c0   0x000004c0   0x00000024   Code   RO          161    i.FreeRcv           uart.o
     0x000004e4   0x000004e4   0x00000024   Code   RO          162    i.FreeSnd           uart.o
     0x00000508   0x00000508   0x00000074   Code   RO          346    i.SVC_Handler_Main  _kernelcore.o
-    0x0000057c   0x0000057c   0x0000011c   Code   RO          277    i.SysTick_Handler   _threadscore.o
-    0x00000698   0x00000698   0x00000140   Code   RO          430    i.SystemInit        system_lpc17xx.o
-    0x000007d8   0x000007d8   0x00000068   Code   RO          166    i.UART0_IRQHandler  uart.o
-    0x00000840   0x00000840   0x00000070   Code   RO          167    i.UART1_IRQHandler  uart.o
-    0x000008b0   0x000008b0   0x000000bc   Code   RO          168    i.UARTInit          uart.o
-    0x0000096c   0x0000096c   0x00000024   Code   RO          172    i.UARTSendChar      uart.o
-    0x00000990   0x00000990   0x00000022   Code   RO          173    i.__NVIC_EnableIRQ  uart.o
-    0x000009b2   0x000009b2   0x00000002   PAD
-    0x000009b4   0x000009b4   0x000000b4   Code   RO          347    i.cleoScheduler     _kernelcore.o
-    0x00000a68   0x00000a68   0x000000f8   Code   RO          279    i.createThread      _threadscore.o
-    0x00000b60   0x00000b60   0x00000008   Code   RO           98    i.ferror            retarget.o
-    0x00000b68   0x00000b68   0x0000000e   Code   RO          100    i.fputc             retarget.o
-    0x00000b76   0x00000b76   0x00000002   PAD
-    0x00000b78   0x00000b78   0x00000048   Code   RO          174    i.getFrequency      uart.o
-    0x00000bc0   0x00000bc0   0x00000006   Code   RO          280    i.getMSPInitialLocation  _threadscore.o
-    0x00000bc6   0x00000bc6   0x00000022   Code   RO          281    i.getNewThreadStack  _threadscore.o
-    0x00000be8   0x00000be8   0x00000028   Code   RO          348    i.kernelInit        _kernelcore.o
-    0x00000c10   0x00000c10   0x00000038   Code   RO          349    i.kernel_start      _kernelcore.o
-    0x00000c48   0x00000c48   0x000000c0   Code   RO            4    i.main              p1_main.o
-    0x00000d08   0x00000d08   0x00000008   Code   RO          350    i.osIdleTask        _kernelcore.o
-    0x00000d10   0x00000d10   0x00000006   Code   RO          351    i.osYield           _kernelcore.o
-    0x00000d16   0x00000d16   0x00000002   PAD
-    0x00000d18   0x00000d18   0x00000044   Code   RO          102    i.sendchar          retarget.o
-    0x00000d5c   0x00000d5c   0x00000018   Code   RO          282    i.setThreadingWithPSP  _threadscore.o
-    0x00000d74   0x00000d74   0x00000034   Code   RO            5    i.task1             p1_main.o
-    0x00000da8   0x00000da8   0x00000034   Code   RO            6    i.task2             p1_main.o
-    0x00000ddc   0x00000ddc   0x00000034   Code   RO            7    i.task3             p1_main.o
-    0x00000e10   0x00000e10   0x00000024   Code   RO          352    i.task_switch       _kernelcore.o
-    0x00000e34   0x00000e34   0x00000028   Data   RO          478    .constdata          c_w.l(_printf_hex_int.o)
-    0x00000e5c   0x00000e5c   0x00000020   Data   RO          690    Region$$Table       anon$$obj.o
+    0x0000057c   0x0000057c   0x00000148   Code   RO          277    i.SysTick_Handler   _threadscore.o
+    0x000006c4   0x000006c4   0x00000140   Code   RO          430    i.SystemInit        system_lpc17xx.o
+    0x00000804   0x00000804   0x00000068   Code   RO          166    i.UART0_IRQHandler  uart.o
+    0x0000086c   0x0000086c   0x00000070   Code   RO          167    i.UART1_IRQHandler  uart.o
+    0x000008dc   0x000008dc   0x000000bc   Code   RO          168    i.UARTInit          uart.o
+    0x00000998   0x00000998   0x00000024   Code   RO          172    i.UARTSendChar      uart.o
+    0x000009bc   0x000009bc   0x00000022   Code   RO          173    i.__NVIC_EnableIRQ  uart.o
+    0x000009de   0x000009de   0x00000002   PAD
+    0x000009e0   0x000009e0   0x00000098   Code   RO          347    i.cleoScheduler     _kernelcore.o
+    0x00000a78   0x00000a78   0x0000010c   Code   RO          279    i.createThread      _threadscore.o
+    0x00000b84   0x00000b84   0x00000008   Code   RO           98    i.ferror            retarget.o
+    0x00000b8c   0x00000b8c   0x0000000e   Code   RO          100    i.fputc             retarget.o
+    0x00000b9a   0x00000b9a   0x00000002   PAD
+    0x00000b9c   0x00000b9c   0x00000048   Code   RO          174    i.getFrequency      uart.o
+    0x00000be4   0x00000be4   0x00000006   Code   RO          280    i.getMSPInitialLocation  _threadscore.o
+    0x00000bea   0x00000bea   0x00000022   Code   RO          281    i.getNewThreadStack  _threadscore.o
+    0x00000c0c   0x00000c0c   0x00000028   Code   RO          348    i.kernelInit        _kernelcore.o
+    0x00000c34   0x00000c34   0x0000003c   Code   RO          349    i.kernel_start      _kernelcore.o
+    0x00000c70   0x00000c70   0x000000c8   Code   RO            4    i.main              p1_main.o
+    0x00000d38   0x00000d38   0x00000008   Code   RO          350    i.osIdleTask        _kernelcore.o
+    0x00000d40   0x00000d40   0x00000006   Code   RO          351    i.osYield           _kernelcore.o
+    0x00000d46   0x00000d46   0x00000002   PAD
+    0x00000d48   0x00000d48   0x00000044   Code   RO          102    i.sendchar          retarget.o
+    0x00000d8c   0x00000d8c   0x00000018   Code   RO          282    i.setThreadingWithPSP  _threadscore.o
+    0x00000da4   0x00000da4   0x00000034   Code   RO            5    i.task1             p1_main.o
+    0x00000dd8   0x00000dd8   0x00000034   Code   RO            6    i.task2             p1_main.o
+    0x00000e0c   0x00000e0c   0x00000034   Code   RO            7    i.task3             p1_main.o
+    0x00000e40   0x00000e40   0x00000024   Code   RO          352    i.task_switch       _kernelcore.o
+    0x00000e64   0x00000e64   0x00000028   Data   RO          478    .constdata          c_w.l(_printf_hex_int.o)
+    0x00000e8c   0x00000e8c   0x00000020   Data   RO          690    Region$$Table       anon$$obj.o
 
 
-    Execution Region ER_RW (Exec base: 0x10000000, Load base: 0x00000e7c, Size: 0x00000050, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RW (Exec base: 0x10000000, Load base: 0x00000eac, Size: 0x00000050, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x10000000   0x00000e7c   0x0000000c   Data   RW            8    .data               p1_main.o
-    0x1000000c   0x00000e88   0x0000000c   Data   RW          103    .data               retarget.o
-    0x10000018   0x00000e94   0x00000020   Data   RW          176    .data               uart.o
-    0x10000038   0x00000eb4   0x00000004   Data   RW          284    .data               _threadscore.o
-    0x1000003c   0x00000eb8   0x0000000d   Data   RW          353    .data               _kernelcore.o
-    0x10000049   0x00000ec5   0x00000003   PAD
-    0x1000004c   0x00000ec8   0x00000004   Data   RW          431    .data               system_lpc17xx.o
+    0x10000000   0x00000eac   0x0000000c   Data   RW            8    .data               p1_main.o
+    0x1000000c   0x00000eb8   0x0000000c   Data   RW          103    .data               retarget.o
+    0x10000018   0x00000ec4   0x00000020   Data   RW          176    .data               uart.o
+    0x10000038   0x00000ee4   0x00000004   Data   RW          284    .data               _threadscore.o
+    0x1000003c   0x00000ee8   0x0000000d   Data   RW          353    .data               _kernelcore.o
+    0x10000049   0x00000ef5   0x00000003   PAD
+    0x1000004c   0x00000ef8   0x00000004   Data   RW          431    .data               system_lpc17xx.o
 
 
-    Execution Region ER_ZI (Exec base: 0x10000050, Load base: 0x00000ecc, Size: 0x00004180, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_ZI (Exec base: 0x10000050, Load base: 0x00000efc, Size: 0x000041c0, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x10000050        -       0x00000080   Zero   RW          175    .bss                uart.o
-    0x100000d0        -       0x000000a0   Zero   RW          283    .bss                _threadscore.o
-    0x10000170        -       0x00000060   Zero   RW          568    .bss                c_w.l(libspace.o)
-    0x100001d0        -       0x00002000   Zero   RW          417    HEAP                startup_lpc17xx.o
-    0x100021d0        -       0x00002000   Zero   RW          416    STACK               startup_lpc17xx.o
+    0x100000d0        -       0x000000e0   Zero   RW          283    .bss                _threadscore.o
+    0x100001b0        -       0x00000060   Zero   RW          568    .bss                c_w.l(libspace.o)
+    0x10000210        -       0x00002000   Zero   RW          417    HEAP                startup_lpc17xx.o
+    0x10002210        -       0x00002000   Zero   RW          416    STACK               startup_lpc17xx.o
 
 
 ==============================================================================
@@ -865,9 +865,9 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       442         58          0         13          0       7883   _kernelcore.o
-       596         30          0          4        160       8593   _threadscore.o
-       348        144          0         12          0      50218   p1_main.o
+       418         58          0         13          0       7991   _kernelcore.o
+       660         30          0          4        224       8741   _threadscore.o
+       356        146          0         12          0      50218   p1_main.o
         94          4          0         12          0       3835   retarget.o
         68         30        204          0      16384       1036   startup_lpc17xx.o
         48          0          0          0          0        248   svc_call.o
@@ -875,7 +875,7 @@ Image component sizes
        624         86          0         32        128      22819   uart.o
 
     ----------------------------------------------------------------------
-      2548        370        236         80      16672      95475   Object Totals
+      2596        372        236         80      16736      95731   Object Totals
          0          0         32          0          0          0   (incl. Generated)
          8          0          0          3          0          0   (incl. Padding)
 
@@ -932,15 +932,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      3432        416        276         80      16768      94763   Grand Totals
-      3432        416        276         80      16768      94763   ELF Image Totals
-      3432        416        276         80          0          0   ROM Totals
+      3480        418        276         80      16832      95019   Grand Totals
+      3480        418        276         80      16832      95019   ELF Image Totals
+      3480        418        276         80          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 3708 (   3.62kB)
-    Total RW  Size (RW Data + ZI Data)             16848 (  16.45kB)
-    Total ROM Size (Code + RO Data + RW Data)       3788 (   3.70kB)
+    Total RO  Size (Code + RO Data)                 3756 (   3.67kB)
+    Total RW  Size (RW Data + ZI Data)             16912 (  16.52kB)
+    Total ROM Size (Code + RO Data + RW Data)       3836 (   3.75kB)
 
 ==============================================================================
 
