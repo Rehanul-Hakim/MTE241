@@ -32,6 +32,7 @@ void task1(void* args)
 	{
 		x++;
 		printf("In task 1. x is: %d\n", x);
+//		osYield();
 	}
 }
 
@@ -42,6 +43,7 @@ void task2(void* args)
 	{
 		y++;
 		printf("In task 2. y is: %d\n", y);
+//		osYield();
 	}
 }
 extern unsigned long counter;
@@ -53,6 +55,7 @@ void task3(void* args)
 		z++;
 		//printf("In task 3. z is: %lu\n", counter);
 		printf("In task 3. z is: %d\n", z);
+//		osYield();
 	}
 }
 
@@ -78,9 +81,9 @@ int main( void )
 	kernelInit();
 	
 	//Setting up the threads
-	createThread(task1, 30);
-	createThread(task2, 50);
-	createThread(task3, 70);
+	createThread(task1, 1);
+	createThread(task2, 7);
+	createThread(task3, 2);
 	
 	//Start the kernel, which will run the first thread
 	kernel_start();

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\tim.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\tim.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Nov 09 15:40:10 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Mon Nov 14 14:55:58 2022
 <BR><P>
 <H3>Maximum Stack Usage =        128 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -538,10 +538,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SVC_Handler
 </UL>
 
-<P><STRONG><a name="[d]"></a>SysTick_Handler</STRONG> (Thumb, 310 bytes, Stack size 8 bytes, _threadscore.o(i.SysTick_Handler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = SysTick_Handler &rArr; cleoScheduler
-</UL>
-<BR>[Calls]<UL><LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cleoScheduler
+<P><STRONG><a name="[d]"></a>SysTick_Handler</STRONG> (Thumb, 276 bytes, Stack size 8 bytes, _threadscore.o(i.SysTick_Handler))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = SysTick_Handler
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_lpc17xx.o(RESET)
 </UL>
@@ -575,14 +573,13 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendchar
 </UL>
 
-<P><STRONG><a name="[5d]"></a>cleoScheduler</STRONG> (Thumb, 140 bytes, Stack size 12 bytes, _kernelcore.o(i.cleoScheduler))
+<P><STRONG><a name="[5d]"></a>cleoScheduler</STRONG> (Thumb, 124 bytes, Stack size 12 bytes, _kernelcore.o(i.cleoScheduler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = cleoScheduler
 </UL>
 <BR>[Called By]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SVC_Handler_Main
-<LI><a href="#[d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Handler
 </UL>
 
-<P><STRONG><a name="[61]"></a>createThread</STRONG> (Thumb, 256 bytes, Stack size 16 bytes, _threadscore.o(i.createThread))
+<P><STRONG><a name="[61]"></a>createThread</STRONG> (Thumb, 260 bytes, Stack size 16 bytes, _threadscore.o(i.createThread))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = createThread &rArr; getNewThreadStack
 </UL>
 <BR>[Calls]<UL><LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getNewThreadStack
@@ -623,7 +620,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[65]"></a>kernel_start</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, _kernelcore.o(i.kernel_start))
+<P><STRONG><a name="[65]"></a>kernel_start</STRONG> (Thumb, 42 bytes, Stack size 8 bytes, _kernelcore.o(i.kernel_start))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = kernel_start &rArr; createThread &rArr; getNewThreadStack
 </UL>
 <BR>[Calls]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osYield

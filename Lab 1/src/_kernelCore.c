@@ -40,7 +40,7 @@ void cleoScheduler()
 	for (i = 0; i < cleoNums-1; ++i){
 		//check if there is a thread with a closer deadline approaching that must run first
 		//and that thread cannot be sleeping
-		if (catArray[i].dinnerTime < catArray[closestToDinner].dinnerTime && catArray[i].status != SLEEPING)
+		if (catArray[i].dinnerTime <= catArray[closestToDinner].dinnerTime && catArray[i].status != SLEEPING)
 		{
 			closestToDinner = i;
 			foundCat = true; //there has been a thread found to run next
@@ -60,7 +60,7 @@ void cleoScheduler()
 		//run closest deadline thread
 		catArray[cleoIndex].status = PLAYING;
 		//set the playtime for this thread
-		catArray[cleoIndex].playTime = cleoPlayTime;
+		//catArray[cleoIndex].playTime = cleoPlayTime;
 	}
 }
 
@@ -83,7 +83,7 @@ void SVC_Handler_Main(uint32_t *svc_args)
 				//stored by the handler
 				catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
 			}
-			//run the scheduler
+			//run the scheduler to determine next task
 			cleoScheduler();
 			//trigger the PendSV interrupt
 			ICSR |= 1 << 28;
@@ -96,7 +96,7 @@ void SVC_Handler_Main(uint32_t *svc_args)
 void kernel_start(void)
 {
 	//create the idle task as the last thread in the array
-	createThread(osIdleTask, 349580439); //THIS IS TEMP VALUE LOL MUST FIX!!!!!!!!!!!
+	createThread(osIdleTask, -1);
 	//is there a thread to run? if yes:
 	if (cleoNums > 0) {
 		//telling the yield function that this is the first thread we are creating

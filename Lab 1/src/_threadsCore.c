@@ -82,7 +82,9 @@ int createThread (void (*task)(void* args), uint32_t setDinner)
 		//the new thread in the array 
 		cleoNums++;
 		cleoPlaying++;
-		catArray[cleoNums].dinnerTime = setDinner;
+		if (setDinner > 0) {
+			catArray[cleoNums-1].dinnerTime = setDinner;
+		}
 		return cleoNums-1;
 	} 
 	return -1;
@@ -98,33 +100,41 @@ void SysTick_Handler(void)
 	int i;
 	for (i = 0; i < cleoNums-1; ++i){
 		//for every thread that's not sleeping, decrement its deadline timer
-		if (catArray[i].status != SLEEPING) {
+		if (catArray[i].status != SLEEPING && catArray[i].timeTilDinner > 0) {
 			catArray[i].timeTilDinner = catArray[i].timeTilDinner - 1;
+		}
+		//if the deadline timer reaches 0, reset to max time
+		else if (catArray[i].status != SLEEPING && catArray[i].timeTilDinner == 0) {
+			catArray[i].timeTilDinner = catArray[i].dinnerTime;
 		}
 		//if the thread is sleeping and timer is not 0, decrement the sleep timer
 		else if (catArray[i].status == SLEEPING && catArray[i].sleepTime > 0) {
 			catArray[i].sleepTime = catArray[i].sleepTime - 1;
 		}
-		//if the thread is sleeping and timer is 0, set the status to waking
+		//if the thread is sleeping and timer is 0
 		else if (catArray[i].status == SLEEPING && catArray[i].sleepTime == 0) {
+			//set the status to waking
 			catArray[i].status = WAKING;
+			//restart the deadline timer
+			catArray[i].timeTilDinner = catArray[i].dinnerTime;
 		}
 		//if the thread is playing and timer is not 0, decrement the play timer
-		else if (catArray[i].status == PLAYING && catArray[i].playTime > 0) {
-			catArray[i].playTime = catArray[i].playTime - 1;
-		}
-		//if the thread is playing and timer is 0, only start performing the context
-		//switch if the mutex is true (meaning resources are available)
-		else if (catArray[i].status == PLAYING && catArray[i].playTime == 0) {
-			//set the mutex to false since os is now using the resources
-			//mutex = false;
-			catArray[i].status = WAKING;	
+		//else if (catArray[i].status == PLAYING && catArray[i].playTime > 0) {
+			//catArray[i].playTime = catArray[i].playTime - 1;
+		//}
+		//printf("deadline of %d\n, %d\n, %d\n", i, catArray[i].timeTilDinner, catArray[i].dinnerTime);
+		if (catArray[i].status == PLAYING) {
+			__ASM("SVC #0");
+			//reset the status to waking
+			//catArray[i].status = WAKING;	
+			//printf("status is %d\n, %d\n", i, catArray[i].status);
 			//moving the task pointer down to allocate space for 8 registers to be stored by the handler
-			catArray[i].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
-			cleoScheduler();
+			//catArray[i].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
+			//run the scheduler to determine the next thread to run
+			//cleoScheduler();
 			//trigger the PendSV interrupt
-			ICSR |= 1 << 28;
-			__asm("isb");
+			//ICSR |= 1 << 28;
+		//	__asm("isb");
 		}
 	}
 }				

@@ -18,7 +18,7 @@
 #define maxThreads 8
 
 //Time Cleo will play before preemptive switching
-#define cleoPlayTime 50
+//#define cleoPlayTime 50
 
 //variable for yield in svc handler
 #define YIELD_SWITCH 0
@@ -36,7 +36,7 @@ typedef struct thread_struct{
 	void (*threadFunc)(void* args);	//threadFunc is the function pointer
 	uint32_t* taskPointer;	//stack pointer for this task
 	int status;	//Cleo cat thread state
-	int playTime; //time in ms the thread is allowed to play before forcing yield (pre-emptive scheduling)
+//	int playTime; //time in ms the thread is allowed to play before forcing yield (pre-emptive scheduling)
 	int sleepTime; //time in ms that Cleo sleeps before waking
 	uint32_t dinnerTime; //cleo's dinner time (deadline/period)
 	uint32_t timeTilDinner; //time that Cleo has left before dinner (deceremented deadline time)
