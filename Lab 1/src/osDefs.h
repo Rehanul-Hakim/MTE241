@@ -55,5 +55,5 @@ void osIdleTask(); //Idle thread
 int createThread (void (*task)(void* args), uint32_t setDinner); //Sets up the threads
 
 void SVC_Handler_Main(uint32_t *svc_args); //get the value of the system call's immediate
-void cleoScheduler(); //determine which task to run next
+int cleoScheduler(); //determine which task to run next
 #endif

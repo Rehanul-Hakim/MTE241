@@ -31,7 +31,8 @@ void osYield()
 }
 
 //cleoScheduler determines which task to run next by checking all deadlines
-void cleoScheduler()
+//and then returns the index of the task that should run next
+int cleoScheduler()
 {
 	int i;
 	int closestToDinner = 0; //stores index of thread with closest deadline
@@ -48,19 +49,13 @@ void cleoScheduler()
 	}
 	if (foundCat == false) //if all threads are sleeping
 	{
-		//go to the idle task, which is always at the end
-		cleoIndex = cleoNums - 1;
-		//run the idle task
-		catArray[cleoIndex].status = PLAYING;
+		//return the index of the thread that should run
+		return cleoNums - 1;
 	}
 	else 
 	{
-		//the current index will go to the thread with closest deadline
-		cleoIndex = closestToDinner;
-		//run closest deadline thread
-		catArray[cleoIndex].status = PLAYING;
-		//set the playtime for this thread
-		//catArray[cleoIndex].playTime = cleoPlayTime;
+		//return the index of the thread that should run
+		return closestToDinner;
 	}
 }
 
@@ -79,12 +74,13 @@ void SVC_Handler_Main(uint32_t *svc_args)
 				{
 					catArray[cleoIndex].status = WAKING;	
 				}
-				// moving the task pointer down to allocate space for 16 registers to be 
+				// moving the task pointer down to allocate space for 8 registers to be 
 				//stored by the handler
 				catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
 			}
 			//run the scheduler to determine next task
-			cleoScheduler();
+			cleoIndex = cleoScheduler();
+			catArray[cleoIndex].status = PLAYING;
 			//trigger the PendSV interrupt
 			ICSR |= 1 << 28;
 			__asm("isb");

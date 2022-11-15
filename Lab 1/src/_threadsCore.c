@@ -82,7 +82,10 @@ int createThread (void (*task)(void* args), uint32_t setDinner)
 		//the new thread in the array 
 		cleoNums++;
 		cleoPlaying++;
+		//if the deadline value is less than 0, then it's the idle thread
+		//if the deadline value is greater than 0
 		if (setDinner > 0) {
+			//then set the deadline value to setDinner
 			catArray[cleoNums-1].dinnerTime = setDinner;
 		}
 		return cleoNums-1;
@@ -118,26 +121,24 @@ void SysTick_Handler(void)
 			//restart the deadline timer
 			catArray[i].timeTilDinner = catArray[i].dinnerTime;
 		}
-		//if the thread is playing and timer is not 0, decrement the play timer
-		//else if (catArray[i].status == PLAYING && catArray[i].playTime > 0) {
-			//catArray[i].playTime = catArray[i].playTime - 1;
-		//}
-		//printf("deadline of %d\n, %d\n, %d\n", i, catArray[i].timeTilDinner, catArray[i].dinnerTime);
-		if (catArray[i].status == PLAYING) {
-			__ASM("SVC #0");
-			//reset the status to waking
-			//catArray[i].status = WAKING;	
-			//printf("status is %d\n, %d\n", i, catArray[i].status);
-			//moving the task pointer down to allocate space for 8 registers to be stored by the handler
-			//catArray[i].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
-			//run the scheduler to determine the next thread to run
-			//cleoScheduler();
-			//trigger the PendSV interrupt
-			//ICSR |= 1 << 28;
-		//	__asm("isb");
-		}
+		//check if there is a different task with an earlier deadline
 	}
-}				
+	int earliestCat = cleoScheduler();
+	if (earliestCat != cleoIndex) {
+		//then switch to that one
+		catArray[cleoIndex].status = WAKING;	
+		// moving the task pointer down to allocate space for 8 registers to be 
+		// stored by the handler
+		catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
+		//set the index to thread with the earlier deadline
+		cleoIndex = earliestCat;
+		//set thread to run status to playing
+		catArray[cleoIndex].status = PLAYING;
+		//trigger the PendSV interrupt
+		ICSR |= 1 << 28;
+		__asm("isb");
+	}
+}			
 
 //Changing a thread's state to sleep
 void cleoSleep(int userSleepTime)

@@ -32,7 +32,7 @@ void task1(void* args)
 	{
 		x++;
 		printf("In task 1. x is: %d\n", x);
-//		osYield();
+		osYield();
 	}
 }
 
@@ -43,7 +43,7 @@ void task2(void* args)
 	{
 		y++;
 		printf("In task 2. y is: %d\n", y);
-//		osYield();
+		osYield();
 	}
 }
 extern unsigned long counter;
@@ -55,16 +55,13 @@ void task3(void* args)
 		z++;
 		//printf("In task 3. z is: %lu\n", counter);
 		printf("In task 3. z is: %d\n", z);
-//		osYield();
+		osYield();
 	}
 }
 
 //This is C. The expected function heading is int main(void).
 int main( void ) 
 {
-	//Configure SysTick to generate an interrupt every millisecond
-	SysTick_Config(SystemCoreClock/1000);
-	
 	//Always call this function at the start. It sets up various peripherals, the clock etc
 	SystemInit();
 
@@ -81,12 +78,15 @@ int main( void )
 	kernelInit();
 	
 	//Setting up the threads
-	createThread(task1, 1);
+	createThread(task1, 10);
 	createThread(task2, 7);
 	createThread(task3, 2);
 	
 	//Start the kernel, which will run the first thread
 	kernel_start();
+	
+	//Configure SysTick to generate an interrupt every millisecond
+	SysTick_Config(SystemCoreClock/1000);
 	
 	//Your code should always terminate in an endless loop if it is done. If you don't
 	//the processor will enter a hardfault and will be weird.

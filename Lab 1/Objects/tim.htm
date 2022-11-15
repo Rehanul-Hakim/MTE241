@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\tim.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\tim.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Mon Nov 14 14:55:58 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Tue Nov 15 15:28:32 2022
 <BR><P>
 <H3>Maximum Stack Usage =        128 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -530,7 +530,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UARTInit
 </UL>
 
-<P><STRONG><a name="[59]"></a>SVC_Handler_Main</STRONG> (Thumb, 104 bytes, Stack size 12 bytes, _kernelcore.o(i.SVC_Handler_Main))
+<P><STRONG><a name="[59]"></a>SVC_Handler_Main</STRONG> (Thumb, 124 bytes, Stack size 12 bytes, _kernelcore.o(i.SVC_Handler_Main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = SVC_Handler_Main &rArr; cleoScheduler
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cleoScheduler
@@ -538,8 +538,10 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SVC_Handler
 </UL>
 
-<P><STRONG><a name="[d]"></a>SysTick_Handler</STRONG> (Thumb, 276 bytes, Stack size 8 bytes, _threadscore.o(i.SysTick_Handler))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = SysTick_Handler
+<P><STRONG><a name="[d]"></a>SysTick_Handler</STRONG> (Thumb, 344 bytes, Stack size 8 bytes, _threadscore.o(i.SysTick_Handler))
+<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = SysTick_Handler &rArr; cleoScheduler
+</UL>
+<BR>[Calls]<UL><LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cleoScheduler
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_lpc17xx.o(RESET)
 </UL>
@@ -573,10 +575,11 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendchar
 </UL>
 
-<P><STRONG><a name="[5d]"></a>cleoScheduler</STRONG> (Thumb, 124 bytes, Stack size 12 bytes, _kernelcore.o(i.cleoScheduler))
+<P><STRONG><a name="[5d]"></a>cleoScheduler</STRONG> (Thumb, 84 bytes, Stack size 12 bytes, _kernelcore.o(i.cleoScheduler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = cleoScheduler
 </UL>
 <BR>[Called By]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SVC_Handler_Main
+<LI><a href="#[d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Handler
 </UL>
 
 <P><STRONG><a name="[61]"></a>createThread</STRONG> (Thumb, 260 bytes, Stack size 16 bytes, _threadscore.o(i.createThread))
@@ -623,8 +626,8 @@ Global Symbols
 <P><STRONG><a name="[65]"></a>kernel_start</STRONG> (Thumb, 42 bytes, Stack size 8 bytes, _kernelcore.o(i.kernel_start))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = kernel_start &rArr; createThread &rArr; getNewThreadStack
 </UL>
-<BR>[Calls]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osYield
-<LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setThreadingWithPSP
+<BR>[Calls]<UL><LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setThreadingWithPSP
+<LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osYield
 <LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;createThread
 </UL>
 <BR>[Called By]<UL><LI><a href="#[49]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -656,6 +659,9 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osIdleTask
 <LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kernel_start
+<LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;task3
+<LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;task2
+<LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;task1
 </UL>
 
 <P><STRONG><a name="[63]"></a>sendchar</STRONG> (Thumb, 64 bytes, Stack size 8 bytes, retarget.o(i.sendchar))
@@ -671,27 +677,30 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kernel_start
 </UL>
 
-<P><STRONG><a name="[36]"></a>task1</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, p1_main.o(i.task1))
+<P><STRONG><a name="[36]"></a>task1</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, p1_main.o(i.task1))
 <BR><BR>[Stack]<UL><LI>Max Depth = 128 + Unknown Stack Size
 <LI>Call Chain = task1 &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
+<LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osYield
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> p1_main.o(i.main)
 </UL>
-<P><STRONG><a name="[37]"></a>task2</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, p1_main.o(i.task2))
+<P><STRONG><a name="[37]"></a>task2</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, p1_main.o(i.task2))
 <BR><BR>[Stack]<UL><LI>Max Depth = 128 + Unknown Stack Size
 <LI>Call Chain = task2 &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
+<LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osYield
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> p1_main.o(i.main)
 </UL>
-<P><STRONG><a name="[38]"></a>task3</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, p1_main.o(i.task3))
+<P><STRONG><a name="[38]"></a>task3</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, p1_main.o(i.task3))
 <BR><BR>[Stack]<UL><LI>Max Depth = 128 + Unknown Stack Size
 <LI>Call Chain = task3 &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
+<LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osYield
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> p1_main.o(i.main)
 </UL>
