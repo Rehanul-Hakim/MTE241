@@ -7,18 +7,11 @@
 int cleoIndex = 0;
 //number of threads existing
 int cleoNums = 0;
-//number of threads running/playing
-int cleoPlaying = 0;
-
-//mutex boolean variable
-//checks if resources are already being used in an interrupt
-//false if used, true if available
-bool mutex;
 
 //initializes memory structures and interrupts necessary to run the kernel
 void kernelInit(void)	
 {
-	SHPR3 |= 0xFF << 16; //set the priority of PendSV to almost the weakest
+	SHPR3 |= 0xFE << 16; //set the priority of PendSV to almost the weakest
 	SHPR3 |= 0xFFU << 24; //Set the priority of SysTick to be the weakest
 	SHPR2 |= 0xFDU << 24; //Set the priority of SVC the be the strongest
 }
@@ -41,7 +34,7 @@ int cleoScheduler()
 	for (i = 0; i < cleoNums-1; ++i){
 		//check if there is a thread with a closer deadline approaching that must run first
 		//and that thread cannot be sleeping
-		if (catArray[i].dinnerTime <= catArray[closestToDinner].dinnerTime && catArray[i].status != SLEEPING)
+		if (catArray[i].timeTilDinner <= catArray[closestToDinner].timeTilDinner && catArray[i].status != SLEEPING)
 		{
 			closestToDinner = i;
 			foundCat = true; //there has been a thread found to run next
@@ -78,12 +71,12 @@ void SVC_Handler_Main(uint32_t *svc_args)
 				//stored by the handler
 				catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
 			}
-			//run the scheduler to determine next task
-			cleoIndex = cleoScheduler();
-			catArray[cleoIndex].status = PLAYING;
-			//trigger the PendSV interrupt
-			ICSR |= 1 << 28;
-			__asm("isb");
+		//run the scheduler to determine next task
+		cleoIndex = cleoScheduler();
+		catArray[cleoIndex].status = PLAYING;
+		//trigger the PendSV interrupt
+		ICSR |= 1 << 28;
+		__asm("isb");
 	}
 }
 
@@ -91,8 +84,11 @@ void SVC_Handler_Main(uint32_t *svc_args)
 //thread, and switches SP to PSP
 void kernel_start(void)
 {
+	//printf("hello there\n");
 	//create the idle task as the last thread in the array
 	createThread(osIdleTask, -1);
+	//Configure SysTick to generate an interrupt every millisecond
+	SysTick_Config(SystemCoreClock/1000);
 	//is there a thread to run? if yes:
 	if (cleoNums > 0) {
 		//telling the yield function that this is the first thread we are creating

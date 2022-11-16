@@ -24,6 +24,7 @@
 int x = 0;
 int y = 0;
 int z = 0;
+extern unsigned long counter;
 
 //Creating task 1
 void task1(void* args)
@@ -31,8 +32,8 @@ void task1(void* args)
 	while(1)
 	{
 		x++;
-		printf("In task 1. x is: %d\n", x);
-		osYield();
+		printf("Meow 1 %d times %lu ms\n", x, counter);
+		cleoSleep(1000);
 	}
 }
 
@@ -42,20 +43,19 @@ void task2(void* args)
 	while(1)
 	{
 		y++;
-		printf("In task 2. y is: %d\n", y);
-		osYield();
+		printf("Meow 2 %d times %lu ms\n", y, counter);
+		cleoSleep(3000);
 	}
 }
-extern unsigned long counter;
+
 //Creating task 3
 void task3(void* args)
 {
 	while(1)
 	{
 		z++;
-		//printf("In task 3. z is: %lu\n", counter);
-		printf("In task 3. z is: %d\n", z);
-		osYield();
+		printf("Meow 3 %d times %lu ms\n", z, counter);
+		cleoSleep(5000);
 	}
 }
 
@@ -78,15 +78,12 @@ int main( void )
 	kernelInit();
 	
 	//Setting up the threads
-	createThread(task1, 10);
-	createThread(task2, 7);
-	createThread(task3, 2);
+	createThread(task1, 100);
+	createThread(task2, 100);
+	createThread(task3, 100);
 	
 	//Start the kernel, which will run the first thread
 	kernel_start();
-	
-	//Configure SysTick to generate an interrupt every millisecond
-	SysTick_Config(SystemCoreClock/1000);
 	
 	//Your code should always terminate in an endless loop if it is done. If you don't
 	//the processor will enter a hardfault and will be weird.

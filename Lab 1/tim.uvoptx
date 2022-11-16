@@ -147,18 +147,18 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>103</LineNumber>
+          <LineNumber>99</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>3160</Address>
+          <Address>1424</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>\ecfile1.uwaterloo.ca\j2253che\My Documents\MTE241\Lab 1\src\_kernelCore.c</Filename>
+          <Filename>\ecfile1.uwaterloo.ca\j2253che\My Documents\MTE241\Lab 1\src\_threadsCore.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\tim\src/_kernelCore.c\103</Expression>
+          <Expression>\\tim\src/_threadsCore.c\99</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -185,22 +185,77 @@
         <Ww>
           <count>4</count>
           <WinNumber>1</WinNumber>
-          <ItemText>cleoPlaying</ItemText>
+          <ItemText>closestToDinner</ItemText>
         </Ww>
         <Ww>
           <count>5</count>
           <WinNumber>1</WinNumber>
-          <ItemText>closestToDinner</ItemText>
+          <ItemText>i</ItemText>
         </Ww>
         <Ww>
           <count>6</count>
           <WinNumber>1</WinNumber>
-          <ItemText>i</ItemText>
+          <ItemText>foundCat</ItemText>
         </Ww>
         <Ww>
           <count>7</count>
           <WinNumber>1</WinNumber>
-          <ItemText>foundCat</ItemText>
+          <ItemText>catArray[0].sleepTime</ItemText>
+        </Ww>
+        <Ww>
+          <count>8</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>catArray[0].dinnerTime</ItemText>
+        </Ww>
+        <Ww>
+          <count>9</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>catArray[1].sleepTime</ItemText>
+        </Ww>
+        <Ww>
+          <count>10</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>catArray[1].dinnerTime</ItemText>
+        </Ww>
+        <Ww>
+          <count>11</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>catArray[2].sleepTime</ItemText>
+        </Ww>
+        <Ww>
+          <count>12</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>catArray[2].dinnerTime</ItemText>
+        </Ww>
+        <Ww>
+          <count>13</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>catArray[3].sleepTime</ItemText>
+        </Ww>
+        <Ww>
+          <count>14</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>catArray[3].dinnerTime</ItemText>
+        </Ww>
+        <Ww>
+          <count>15</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>setDinner</ItemText>
+        </Ww>
+        <Ww>
+          <count>16</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>catArray[0].timeTilDinner</ItemText>
+        </Ww>
+        <Ww>
+          <count>17</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>catArray[1].timeTilDinner</ItemText>
+        </Ww>
+        <Ww>
+          <count>18</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>catArray[2].timeTilDinner</ItemText>
         </Ww>
       </WatchWindow1>
       <Tracepoint>

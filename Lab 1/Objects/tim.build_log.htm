@@ -29,38 +29,36 @@ Project File Date:  09/16/2022
 Rebuild target 'Target 1'
 compiling Retarget.c...
 compiling p1_main.c...
-src\osDefs.h(53): warning:  #1295-D: Deprecated declaration osYield - give arg types
+src\osDefs.h(50): warning:  #1295-D: Deprecated declaration osYield - give arg types
   void osYield();	//pre-loads memory with important information to avoid problem of bootstrapping (context switch)
-src\osDefs.h(54): warning:  #1295-D: Deprecated declaration osIdleTask - give arg types
+src\osDefs.h(51): warning:  #1295-D: Deprecated declaration osIdleTask - give arg types
   void osIdleTask(); //Idle thread
-src\osDefs.h(58): warning:  #1295-D: Deprecated declaration cleoScheduler - give arg types
+src\osDefs.h(55): warning:  #1295-D: Deprecated declaration cleoScheduler - give arg types
   int cleoScheduler(); //determine which task to run next
 src\p1_main.c: 3 warnings, 0 errors
 compiling uart.c...
 assembling svc_call.s...
-assembling startup_LPC17xx.s...
-compiling _kernelCore.c...
-src\osDefs.h(53): warning:  #1295-D: Deprecated declaration osYield - give arg types
-  void osYield();	//pre-loads memory with important information to avoid problem of bootstrapping (context switch)
-src\osDefs.h(54): warning:  #1295-D: Deprecated declaration osIdleTask - give arg types
-  void osIdleTask(); //Idle thread
-src\osDefs.h(58): warning:  #1295-D: Deprecated declaration cleoScheduler - give arg types
-  int cleoScheduler(); //determine which task to run next
-src\_kernelCore.c(95): warning:  #68-D: integer conversion resulted in a change of sign
-  	createThread(osIdleTask, -1);
-src\_kernelCore.c: 4 warnings, 0 errors
 compiling _threadsCore.c...
-src\osDefs.h(53): warning:  #1295-D: Deprecated declaration osYield - give arg types
+src\osDefs.h(50): warning:  #1295-D: Deprecated declaration osYield - give arg types
   void osYield();	//pre-loads memory with important information to avoid problem of bootstrapping (context switch)
-src\osDefs.h(54): warning:  #1295-D: Deprecated declaration osIdleTask - give arg types
+src\osDefs.h(51): warning:  #1295-D: Deprecated declaration osIdleTask - give arg types
   void osIdleTask(); //Idle thread
-src\osDefs.h(58): warning:  #1295-D: Deprecated declaration cleoScheduler - give arg types
+src\osDefs.h(55): warning:  #1295-D: Deprecated declaration cleoScheduler - give arg types
   int cleoScheduler(); //determine which task to run next
 src\_threadsCore.c: 3 warnings, 0 errors
+assembling startup_LPC17xx.s...
+compiling _kernelCore.c...
+src\osDefs.h(50): warning:  #1295-D: Deprecated declaration osYield - give arg types
+  void osYield();	//pre-loads memory with important information to avoid problem of bootstrapping (context switch)
+src\osDefs.h(51): warning:  #1295-D: Deprecated declaration osIdleTask - give arg types
+  void osIdleTask(); //Idle thread
+src\osDefs.h(55): warning:  #1295-D: Deprecated declaration cleoScheduler - give arg types
+  int cleoScheduler(); //determine which task to run next
+src\_kernelCore.c: 3 warnings, 0 errors
 compiling system_LPC17xx.c...
 linking...
-Program Size: Code=3492 RO-data=276 RW-data=80 ZI-data=16800  
-".\Objects\tim.axf" - 0 Error(s), 10 Warning(s).
+Program Size: Code=3668 RO-data=276 RW-data=72 ZI-data=16800  
+".\Objects\tim.axf" - 0 Error(s), 9 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -87,10 +85,10 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:CORE:5.5.0
 
    * Component: Keil::Device:Startup:1.0.0
-      Source file:   Device\Source\system_LPC17xx.c
       Include file:  Device\Include\LPC17xx.h
-      Source file:   Device\Source\ARM\startup_LPC17xx.s
+      Source file:   Device\Source\system_LPC17xx.c
       Include file:  RTE_Driver\Config\RTE_Device.h
+      Source file:   Device\Source\ARM\startup_LPC17xx.s
 Build Time Elapsed:  00:00:01
 </pre>
 </body>

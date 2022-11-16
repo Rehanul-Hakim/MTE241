@@ -41,7 +41,7 @@ void setThreadingWithPSP(uint32_t* threadStack)
 }
 
 //creating a new thread, returns index of new thread if successful, returns -1 if array is full
-int createThread (void (*task)(void* args), uint32_t setDinner)
+int createThread (void (*task)(void* args), int setDinner)
 {
 	if (cleoNums < maxThreads)
 	{
@@ -81,12 +81,12 @@ int createThread (void (*task)(void* args), uint32_t setDinner)
 		
 		//the new thread in the array 
 		cleoNums++;
-		cleoPlaying++;
 		//if the deadline value is less than 0, then it's the idle thread
 		//if the deadline value is greater than 0
 		if (setDinner > 0) {
 			//then set the deadline value to setDinner
 			catArray[cleoNums-1].dinnerTime = setDinner;
+			catArray[cleoNums-1].timeTilDinner = setDinner;
 		}
 		return cleoNums-1;
 	} 
@@ -96,12 +96,10 @@ int createThread (void (*task)(void* args), uint32_t setDinner)
 //Using SysTick for time dependant operations and preemptive switching
 void SysTick_Handler(void)
 {
-	//increment the global counter variable every ms
 	counter++;
 	//using a for loop to go through the array and decrement any relevant
 	//timers every ms and changes their status when appropriate
-	int i;
-	for (i = 0; i < cleoNums-1; ++i){
+	for (int i = 0; i < cleoNums-1; i++){
 		//for every thread that's not sleeping, decrement its deadline timer
 		if (catArray[i].status != SLEEPING && catArray[i].timeTilDinner > 0) {
 			catArray[i].timeTilDinner = catArray[i].timeTilDinner - 1;
@@ -120,25 +118,28 @@ void SysTick_Handler(void)
 			catArray[i].status = WAKING;
 			//restart the deadline timer
 			catArray[i].timeTilDinner = catArray[i].dinnerTime;
+			}
 		}
+		//printf ("time left of %d: %d\n", i, catArray[i].timeTilDinner);
 		//check if there is a different task with an earlier deadline
-	}
-	int earliestCat = cleoScheduler();
-	if (earliestCat != cleoIndex) {
-		//then switch to that one
-		catArray[cleoIndex].status = WAKING;	
-		// moving the task pointer down to allocate space for 8 registers to be 
-		// stored by the handler
-		catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
-		//set the index to thread with the earlier deadline
-		cleoIndex = earliestCat;
-		//set thread to run status to playing
-		catArray[cleoIndex].status = PLAYING;
-		//trigger the PendSV interrupt
-		ICSR |= 1 << 28;
-		__asm("isb");
-	}
-}			
+		//variable to check for a thread with an earlier deadline 
+		int earliestCat = cleoScheduler();
+		if (earliestCat != cleoIndex) {
+			//then switch to that one
+			catArray[cleoIndex].status = WAKING;	
+			// moving the task pointer down to allocate space for 8 registers to be 
+			// stored by the handler
+			catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
+			//set the index to thread with the earlier deadline
+			cleoIndex = earliestCat;
+			//set thread to run status to playing
+			catArray[cleoIndex].status = PLAYING;
+			//trigger the PendSV interrupt
+			ICSR |= 1 << 28;
+			__asm("isb");
+		}
+	return;
+}
 
 //Changing a thread's state to sleep
 void cleoSleep(int userSleepTime)
