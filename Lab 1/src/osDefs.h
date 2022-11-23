@@ -17,8 +17,11 @@
 //Maximum number of threads to be 8, allocated statically
 #define maxThreads 8
 
+//Maximum number of mutexes to be 8, allocated statically
+#define maxMutex 8
+
 //Time Cleo will play before preemptive switching
-//#define cleoPlayTime 50
+#define cleoPlayTime 50
 
 //variable for yield in svc handler
 #define YIELD_SWITCH 0
@@ -31,16 +34,39 @@
 #define BLOCKED 4	///thread cannot run until resources are available
 
 //Thread data structure
-//Defines a structure called “thread_struct”, with “cleoThread” as the alias for the struct.  
+//Defines a structure called thread_struct, with cleoThread as the alias for the struct.  
 typedef struct thread_struct{
 	void (*threadFunc)(void* args);	//threadFunc is the function pointer
 	uint32_t* taskPointer;	//stack pointer for this task
 	int status;	//Cleo cat thread state
+	int playTime; //time in ms the thread is allowed to play before forcing yield (pre-emptive scheduling)
 	int sleepTime; //time in ms that Cleo sleeps before waking
-	int dinnerTime; //cleo's dinner time (deadline/period)
-	int timeTilDinner; //time that Cleo has left before dinner (deceremented deadline time)
 }cleoThread;
 
+//Mutex data structure
+//Defines a structure called mutex_struct, with cleoMutex as the alias for the struct.  
+typedef struct mutex_struct{
+	bool cleoResource; //Boolean to indicate if resource is available or not
+	int resourceID; //Mutex ID
+	int threadOwner; //Index of the thread which currently owns the mutex
+}cleoMutex;
+
+//Types of Mutexes
+int LED; //Mutex to protect use of LEDs
+int UART; //Mutex to protect UART functions like "printf"
+int GV; //Mutex to protect use of global variables
+
+//waiting queue functions
+//to put a thread into a queue
+void enqueue(int waitingIndex);
+//take a thread out of a queue, returns true if success, false if queue empty
+bool dequeue(void);
+//array to store the queue
+int waitingQueue[maxMutex];
+int back = - 1;
+int front = - 1;
+
+//external variables
 extern cleoThread catArray[maxThreads]; //catArray is an array size maxThreads containing cleoThread
 extern int cleoNums; //current number of threads created
 extern int cleoIndex; //the index of the current running thread
@@ -49,8 +75,8 @@ extern int cleoIndex; //the index of the current running thread
 void setThreadingWithPSP(uint32_t* threadStack); //Sets value of PSP to threadStack and changes the CONTROL register
 void osYield();	//pre-loads memory with important information to avoid problem of bootstrapping (context switch)
 void osIdleTask(); //Idle thread
-int createThread (void (*task)(void* args), int setDinner); //Sets up the threads
+int createThread (void (*task)(void* args)); //Sets up the threads
 
 void SVC_Handler_Main(uint32_t *svc_args); //get the value of the system call's immediate
-int cleoScheduler(); //determine which task to run next
+void cleoScheduler(); //determine which task to run next
 #endif

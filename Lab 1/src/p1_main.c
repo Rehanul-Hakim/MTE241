@@ -24,7 +24,6 @@
 int x = 0;
 int y = 0;
 int z = 0;
-extern unsigned long counter;
 
 //Creating task 1
 void task1(void* args)
@@ -32,8 +31,7 @@ void task1(void* args)
 	while(1)
 	{
 		x++;
-		printf("Meow 1 %d times %lu ms\n", x, counter);
-		cleoSleep(1000);
+		printf("In task 1. x is: %d\n", x);
 	}
 }
 
@@ -43,25 +41,27 @@ void task2(void* args)
 	while(1)
 	{
 		y++;
-		printf("Meow 2 %d times %lu ms\n", y, counter);
-		cleoSleep(3000);
+		printf("In task 2. y is: %d\n", y);
 	}
 }
-
+extern unsigned long counter;
 //Creating task 3
 void task3(void* args)
 {
 	while(1)
 	{
 		z++;
-		printf("Meow 3 %d times %lu ms\n", z, counter);
-		cleoSleep(5000);
+		//printf("In task 3. z is: %lu\n", counter);
+		printf("In task 3. z is: %d\n", z);
 	}
 }
 
 //This is C. The expected function heading is int main(void).
 int main( void ) 
 {
+	//Configure SysTick to generate an interrupt every millisecond
+	SysTick_Config(SystemCoreClock/1000);
+	
 	//Always call this function at the start. It sets up various peripherals, the clock etc
 	SystemInit();
 
@@ -78,9 +78,14 @@ int main( void )
 	kernelInit();
 	
 	//Setting up the threads
-	createThread(task1, 100);
-	createThread(task2, 100);
-	createThread(task3, 100);
+	createThread(task1);
+	createThread(task2);
+	createThread(task3);
+	
+	//Setting up the mutexes
+	LED = osMutexCreate();
+	UART = osMutexCreate();
+	GV = osMutexCreate();
 	
 	//Start the kernel, which will run the first thread
 	kernel_start();

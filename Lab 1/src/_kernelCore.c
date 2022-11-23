@@ -3,15 +3,19 @@
 #include "stdio.h"
 #include <stdint.h>
 
-//the index of the task running
-int cleoIndex = 0;
-//number of threads existing
-int cleoNums = 0;
+//the index of the mutex
+int mutexIndex = 0;
+//number of mutexes existing
+int mutexNums = 0;
+
+//Array of structs to store mutexes.
+//mutexArray is an array of size maxMutex containing cleoMutex
+cleoMutex mutexArray[maxMutex]; 
 
 //initializes memory structures and interrupts necessary to run the kernel
 void kernelInit(void)	
 {
-	SHPR3 |= 0xFE << 16; //set the priority of PendSV to almost the weakest
+	SHPR3 |= 0xFF << 16; //set the priority of PendSV to almost the weakest
 	SHPR3 |= 0xFFU << 24; //Set the priority of SysTick to be the weakest
 	SHPR2 |= 0xFDU << 24; //Set the priority of SVC the be the strongest
 }
@@ -23,32 +27,32 @@ void osYield()
 	__ASM("SVC #0");
 }
 
-//cleoScheduler determines which task to run next by checking all deadlines
-//and then returns the index of the task that should run next
-int cleoScheduler()
+//cleoScheduler determines which task to run next
+void cleoScheduler()
 {
-	int i;
-	int closestToDinner = 0; //stores index of thread with closest deadline
-	bool foundCat = false; //if there is a potential "WAKING" thread to run next
-	//iterate through all the threads and check their deadlines
-	for (i = 0; i < cleoNums-1; ++i){
-		//check if there is a thread with a closer deadline approaching that must run first
-		//and that thread cannot be sleeping
-		if (catArray[i].timeTilDinner <= catArray[closestToDinner].timeTilDinner && catArray[i].status != SLEEPING)
-		{
-			closestToDinner = i;
-			foundCat = true; //there has been a thread found to run next
-		}
+	//variable to store the original index
+	int originalIndex = cleoIndex;
+	//go to the next task in the array, if we are at the end, loop back to 
+	//the beginning
+	cleoIndex = (cleoIndex+1)%(cleoNums);
+	//if the thread we are at is not waking, then go to the next thread
+	//also check if we already checked the entire array and we are back at the beginning
+	while (catArray[cleoIndex].status != WAKING && originalIndex != cleoIndex){
+		cleoIndex = (cleoIndex+1)%(cleoNums);				
 	}
-	if (foundCat == false) //if all threads are sleeping
-	{
-		//return the index of the thread that should run
-		return cleoNums - 1;
+	//if all threads are sleeping, then run the idle task thread
+	if (originalIndex == cleoIndex && catArray[cleoIndex].status == SLEEPING) {
+		//set the index to where the idle task is to run idle
+		//the idle task is always at the end of the array
+		cleoIndex = cleoNums - 1;
+		catArray[cleoIndex].status = PLAYING;
 	}
-	else 
-	{
-		//return the index of the thread that should run
-		return closestToDinner;
+	//if a thread is found that has the status WAKING
+	else {
+		//setting the status to PLAYING
+		catArray[cleoIndex].status = PLAYING;
+		//cleo will play for max 500 ms seconds before being switched
+		catArray[cleoIndex].playTime = cleoPlayTime;
 	}
 }
 
@@ -67,16 +71,15 @@ void SVC_Handler_Main(uint32_t *svc_args)
 				{
 					catArray[cleoIndex].status = WAKING;	
 				}
-				// moving the task pointer down to allocate space for 8 registers to be 
+				// moving the task pointer down to allocate space for 16 registers to be 
 				//stored by the handler
 				catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
 			}
-		//run the scheduler to determine next task
-		cleoIndex = cleoScheduler();
-		catArray[cleoIndex].status = PLAYING;
-		//trigger the PendSV interrupt
-		ICSR |= 1 << 28;
-		__asm("isb");
+			//run the scheduler
+			cleoScheduler();
+			//trigger the PendSV interrupt
+			ICSR |= 1 << 28;
+			__asm("isb");
 	}
 }
 
@@ -84,11 +87,8 @@ void SVC_Handler_Main(uint32_t *svc_args)
 //thread, and switches SP to PSP
 void kernel_start(void)
 {
-	//printf("hello there\n");
 	//create the idle task as the last thread in the array
-	createThread(osIdleTask, -1);
-	//Configure SysTick to generate an interrupt every millisecond
-	SysTick_Config(SystemCoreClock/1000);
+	createThread(osIdleTask);
 	//is there a thread to run? if yes:
 	if (cleoNums > 0) {
 		//telling the yield function that this is the first thread we are creating
@@ -115,3 +115,63 @@ void osIdleTask()
 		osYield();
 	}
 }
+
+//create the mutex, returns the ID of the mutex
+//allocates memory if needed, sets up mutex and allows OS to assign ownership
+int	osMutexCreate()
+{	
+	if (mutexNums < maxMutex)
+	{
+		//set the resource to be initially available
+		mutexArray[mutexNums].cleoResource = true;
+		//set the ID to the value of the index
+		mutexArray[mutexNums].resourceID = mutexNums;
+		//adding new mutex to array
+		mutexNums++;
+		//return the ID of the mutex just created
+		return mutexNums-1;
+	} 
+	//return error if the array is full
+	return -1;
+}
+
+//thread acquires mutex if resource is free or adds thread to "waiting" queue if resource is locked
+bool osMutexAcquire(int wantedID)
+{
+	//if the resource is available for use
+	if (mutexArray[wantedID].cleoResource == true) 
+	{
+		//assign the ownership of that mutex to the thread that wants it
+		mutexArray[wantedID].threadOwner = cleoIndex;
+		return true;
+	}
+	enqueue(cleoIndex);
+	return false;
+}
+
+//waiting queue functions
+//put a thread into the queue
+void enqueue(int waitingIndex)
+{
+	//if its the first thread in the array
+	if (front == - 1)
+	{
+		front = 0;
+	}
+	//increase the back value as we add a new thread
+	back++;
+	//put the index of the waiting thread into the array
+	waitingQueue[back] = waitingIndex;
+} 
+
+//take thread out of the array fifo style
+bool dequeue(void)
+{
+	//if we are trying to take a thread out of an empty waiting dequeue
+  if (front == - 1 || front > back)
+  {
+      return false;
+  }
+	front++;
+	return true;
+} 

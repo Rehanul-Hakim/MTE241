@@ -1,3 +1,4 @@
+#include "stdbool.h"
 #ifndef CLEO_kernel
 #define CLEO_kernel
 
@@ -9,5 +10,13 @@ void kernel_start(void);
 
 //this performs the task/context switching
 int task_switch(void);
+
+//mutex functions
+//create the mutex
+int osMutexCreate(void);
+//thread acquires mutex if resource is free or adds thread to "waiting" queue if resource is locked
+bool osMutexAcquire(int wantedID); 
+//once thread is done using resources, mutex is released
+bool osMutexRelease(void);
 
 #endif

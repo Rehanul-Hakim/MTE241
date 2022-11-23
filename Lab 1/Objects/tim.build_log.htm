@@ -29,36 +29,70 @@ Project File Date:  09/16/2022
 Rebuild target 'Target 1'
 compiling Retarget.c...
 compiling p1_main.c...
-src\osDefs.h(50): warning:  #1295-D: Deprecated declaration osYield - give arg types
+src\osDefs.h(76): warning:  #1295-D: Deprecated declaration osYield - give arg types
   void osYield();	//pre-loads memory with important information to avoid problem of bootstrapping (context switch)
-src\osDefs.h(51): warning:  #1295-D: Deprecated declaration osIdleTask - give arg types
+src\osDefs.h(77): warning:  #1295-D: Deprecated declaration osIdleTask - give arg types
   void osIdleTask(); //Idle thread
-src\osDefs.h(55): warning:  #1295-D: Deprecated declaration cleoScheduler - give arg types
-  int cleoScheduler(); //determine which task to run next
-src\p1_main.c: 3 warnings, 0 errors
+src\osDefs.h(81): warning:  #1295-D: Deprecated declaration cleoScheduler - give arg types
+  void cleoScheduler(); //determine which task to run next
+src\osDefs.h(82): warning:  #1-D: last line of file ends without a newline
+  #endif
+src\_threadsCore.h(19): warning:  #1-D: last line of file ends without a newline
+  #endif
+src\_kernelCore.h(22): warning:  #1-D: last line of file ends without a newline
+  #endif
+src\p1_main.c(96): warning:  #1-D: last line of file ends without a newline
+  }
+src\p1_main.c: 7 warnings, 0 errors
 compiling uart.c...
-assembling svc_call.s...
 compiling _threadsCore.c...
-src\osDefs.h(50): warning:  #1295-D: Deprecated declaration osYield - give arg types
+src\osDefs.h(76): warning:  #1295-D: Deprecated declaration osYield - give arg types
   void osYield();	//pre-loads memory with important information to avoid problem of bootstrapping (context switch)
-src\osDefs.h(51): warning:  #1295-D: Deprecated declaration osIdleTask - give arg types
+src\osDefs.h(77): warning:  #1295-D: Deprecated declaration osIdleTask - give arg types
   void osIdleTask(); //Idle thread
-src\osDefs.h(55): warning:  #1295-D: Deprecated declaration cleoScheduler - give arg types
-  int cleoScheduler(); //determine which task to run next
-src\_threadsCore.c: 3 warnings, 0 errors
+src\osDefs.h(81): warning:  #1295-D: Deprecated declaration cleoScheduler - give arg types
+  void cleoScheduler(); //determine which task to run next
+src\osDefs.h(82): warning:  #1-D: last line of file ends without a newline
+  #endif
+src\_threadsCore.h(19): warning:  #1-D: last line of file ends without a newline
+  #endif
+src\_threadsCore.c(134): warning:  #1-D: last line of file ends without a newline
+  }
+src\_threadsCore.c: 6 warnings, 0 errors
+assembling svc_call.s...
 assembling startup_LPC17xx.s...
 compiling _kernelCore.c...
-src\osDefs.h(50): warning:  #1295-D: Deprecated declaration osYield - give arg types
+src\osDefs.h(76): warning:  #1295-D: Deprecated declaration osYield - give arg types
   void osYield();	//pre-loads memory with important information to avoid problem of bootstrapping (context switch)
-src\osDefs.h(51): warning:  #1295-D: Deprecated declaration osIdleTask - give arg types
+src\osDefs.h(77): warning:  #1295-D: Deprecated declaration osIdleTask - give arg types
   void osIdleTask(); //Idle thread
-src\osDefs.h(55): warning:  #1295-D: Deprecated declaration cleoScheduler - give arg types
-  int cleoScheduler(); //determine which task to run next
-src\_kernelCore.c: 3 warnings, 0 errors
+src\osDefs.h(81): warning:  #1295-D: Deprecated declaration cleoScheduler - give arg types
+  void cleoScheduler(); //determine which task to run next
+src\osDefs.h(82): warning:  #1-D: last line of file ends without a newline
+  #endif
+src\_kernelCore.h(22): warning:  #1-D: last line of file ends without a newline
+  #endif
+src\_kernelCore.c(177): warning:  #1-D: last line of file ends without a newline
+  } 
+src\_kernelCore.c: 6 warnings, 0 errors
 compiling system_LPC17xx.c...
 linking...
-Program Size: Code=3668 RO-data=276 RW-data=72 ZI-data=16800  
-".\Objects\tim.axf" - 0 Error(s), 9 Warning(s).
+.\Objects\tim.axf: Error: L6200E: Symbol waitingQueue multiply defined (by _threadscore.o and p1_main.o).
+.\Objects\tim.axf: Error: L6200E: Symbol waitingQueue multiply defined (by _kernelcore.o and p1_main.o).
+.\Objects\tim.axf: Error: L6200E: Symbol LED multiply defined (by _threadscore.o and p1_main.o).
+.\Objects\tim.axf: Error: L6200E: Symbol LED multiply defined (by _kernelcore.o and p1_main.o).
+.\Objects\tim.axf: Error: L6200E: Symbol UART multiply defined (by _threadscore.o and p1_main.o).
+.\Objects\tim.axf: Error: L6200E: Symbol UART multiply defined (by _kernelcore.o and p1_main.o).
+.\Objects\tim.axf: Error: L6200E: Symbol GV multiply defined (by _threadscore.o and p1_main.o).
+.\Objects\tim.axf: Error: L6200E: Symbol GV multiply defined (by _kernelcore.o and p1_main.o).
+.\Objects\tim.axf: Error: L6200E: Symbol back multiply defined (by _threadscore.o and p1_main.o).
+.\Objects\tim.axf: Error: L6200E: Symbol back multiply defined (by _kernelcore.o and p1_main.o).
+.\Objects\tim.axf: Error: L6200E: Symbol front multiply defined (by _threadscore.o and p1_main.o).
+.\Objects\tim.axf: Error: L6200E: Symbol front multiply defined (by _kernelcore.o and p1_main.o).
+Not enough information to list image symbols.
+Not enough information to list load addresses in the image map.
+Finished: 2 information, 0 warning and 12 error messages.
+".\Objects\tim.axf" - 12 Error(s), 19 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -85,10 +119,11 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:CORE:5.5.0
 
    * Component: Keil::Device:Startup:1.0.0
-      Include file:  Device\Include\LPC17xx.h
-      Source file:   Device\Source\system_LPC17xx.c
       Include file:  RTE_Driver\Config\RTE_Device.h
+      Source file:   Device\Source\system_LPC17xx.c
+      Include file:  Device\Include\LPC17xx.h
       Source file:   Device\Source\ARM\startup_LPC17xx.s
+Target not created.
 Build Time Elapsed:  00:00:01
 </pre>
 </body>
