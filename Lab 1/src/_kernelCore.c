@@ -8,6 +8,16 @@ int mutexIndex = 0;
 //number of mutexes existing
 int mutexNums = 0;
 
+//Types of Mutexes
+int LED; //Mutex to protect use of LEDs
+int UART; //Mutex to protect UART functions like "printf"
+int GV; //Mutex to protect use of global variables
+
+//array to store the queue
+int waitingQueue[maxMutex];
+int back = - 1;
+int front = - 1;
+
 //Array of structs to store mutexes.
 //mutexArray is an array of size maxMutex containing cleoMutex
 cleoMutex mutexArray[maxMutex]; 
@@ -40,8 +50,8 @@ void cleoScheduler()
 	while (catArray[cleoIndex].status != WAKING && originalIndex != cleoIndex){
 		cleoIndex = (cleoIndex+1)%(cleoNums);				
 	}
-	//if all threads are sleeping, then run the idle task thread
-	if (originalIndex == cleoIndex && catArray[cleoIndex].status == SLEEPING) {
+	//if all threads are sleeping OR blocked, then run the idle task thread
+	if (originalIndex == cleoIndex && ((catArray[cleoIndex].status == SLEEPING) || (catArray[cleoIndex].status == BLOCKED))) {
 		//set the index to where the idle task is to run idle
 		//the idle task is always at the end of the array
 		cleoIndex = cleoNums - 1;
@@ -66,8 +76,8 @@ void SVC_Handler_Main(uint32_t *svc_args)
 		//the first time running storing and setting status does not happen
 		if (cleoIndex >= 0) 
 			{	
-				//if thread is sleeping, it won't be set to waking immediately
-				if (catArray[cleoIndex].status != SLEEPING)
+				//if thread is already sleeping OR blocked, it won't be set to waking immediately
+				if ((catArray[cleoIndex].status != SLEEPING) || (catArray[cleoIndex].status != BLOCKED))
 				{
 					catArray[cleoIndex].status = WAKING;	
 				}
@@ -108,7 +118,7 @@ int task_switch(void)
 	return 1;
 }
 
-//Idle thread that will run when either all threads are sleeping or there are no threads
+//Idle thread that will run when either all threads are sleeping, blocked, or there are no threads
 void osIdleTask()
 {
 	while (1) {
@@ -118,7 +128,7 @@ void osIdleTask()
 
 //create the mutex, returns the ID of the mutex
 //allocates memory if needed, sets up mutex and allows OS to assign ownership
-int	osMutexCreate()
+int	osMutexCreate(void)
 {	
 	if (mutexNums < maxMutex)
 	{
@@ -143,35 +153,74 @@ bool osMutexAcquire(int wantedID)
 	{
 		//assign the ownership of that mutex to the thread that wants it
 		mutexArray[wantedID].threadOwner = cleoIndex;
+		//thread is now using this mutex
+		mutexArray[wantedID].cleoResource = false;
 		return true;
 	}
 	enqueue(cleoIndex);
+	//the status of this thread is now blocked
+	catArray[cleoIndex].status = BLOCKED;
 	return false;
 }
 
-//waiting queue functions
-//put a thread into the queue
+//once thread is done using resources, mutex is released
+bool osMutexRelease(int releaseID)
+{
+	mutexArray[releaseID].cleoResource = true;
+	//check if the queue is not empty
+	if (!isEmpty()) {
+		//release the front thread
+		//set the status to active
+		catArray[dequeue()].status = WAKING;
+	}
+}
+
+//waiting queue functions (circular queue)
+//check if waiting queue is empty
+int isEmpty(void) {
+  if (front == -1) {
+		return 1;
+	}
+  return 0;
+}
+
+//put a thread into a circular queue
 void enqueue(int waitingIndex)
 {
+	//we don't have a full check since no more than 8 threads can be added
+	//to this array anyway
 	//if its the first thread in the array
 	if (front == - 1)
 	{
 		front = 0;
 	}
 	//increase the back value as we add a new thread
-	back++;
+	//loop back to the beginning if we reached the end index
+	back = (back + 1) % cleoNums;
 	//put the index of the waiting thread into the array
 	waitingQueue[back] = waitingIndex;
 } 
 
 //take thread out of the array fifo style
-bool dequeue(void)
+int dequeue(void)
 {
 	//if we are trying to take a thread out of an empty waiting dequeue
-  if (front == - 1 || front > back)
+  if (front == - 1)
   {
-      return false;
+		//if empty, return error
+		return -1;
   }
-	front++;
-	return true;
+	// the index of the thread that is returned
+	int returnedCleo;
+	returnedCleo = waitingQueue[front];
+	//if queue is empty
+	if (front == back) {
+		front = -1;
+		back = -1;
+	} 
+	// if the queue is not empty, move front index forward
+	else {
+		front = (front + 1) % cleoNums;
+	}
+	return returnedCleo;
 } 

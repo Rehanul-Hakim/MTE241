@@ -16,4 +16,8 @@ void SysTick_Handler(void);
 //Function that turns the thread's state to sleep after running
 void cleoSleep(int userSleepTime);
 
+//Functions to control LEDS
+//set LEDs
+void setLED(unsigned int num);
+
 #endif

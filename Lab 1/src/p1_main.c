@@ -30,8 +30,12 @@ void task1(void* args)
 {
 	while(1)
 	{
+		osMutexAcquire(GV);
 		x++;
-		printf("In task 1. x is: %d\n", x);
+		printf("Thread 1. x is: %d\n", x);
+		osMutexRelease(GV);
+		//osYield();
+		cleoSleep(500);
 	}
 }
 
@@ -40,19 +44,35 @@ void task2(void* args)
 {
 	while(1)
 	{
-		y++;
-		printf("In task 2. y is: %d\n", y);
+		osMutexAcquire(GV);
+		osMutexAcquire(LED);
+		//y++;
+		unsigned int setNum = x%47;
+		printf("Thread 2. Set LED to: %d\n", setNum);
+		setLED(setNum);
+		osMutexRelease(GV);
+		osMutexRelease(LED);
+		//osYield();
+		cleoSleep(500);
 	}
 }
-extern unsigned long counter;
+
+//extern unsigned long counter;
 //Creating task 3
 void task3(void* args)
 {
 	while(1)
 	{
-		z++;
-		//printf("In task 3. z is: %lu\n", counter);
-		printf("In task 3. z is: %d\n", z);
+		osMutexAcquire(GV);
+		osMutexAcquire(LED);
+		//z++;
+		int setNum = 0x71;
+		printf("Thread 3. Set LED to: %d\n", setNum);
+		setLED(setNum);
+		osMutexRelease(GV);
+		osMutexRelease(LED);
+		//osYield();
+		cleoSleep(500);
 	}
 }
 
@@ -67,6 +87,16 @@ int main( void )
 
 	//Printf now goes to the UART
 	printf("Hello, world!\r\n");
+	
+	//set LED directions
+	LPC_GPIO1->FIODIR |= 1<<28;
+	LPC_GPIO1->FIODIR |= 1<<29;
+	LPC_GPIO1->FIODIR |= 1<<31;
+	LPC_GPIO2->FIODIR |= 1<<2;
+	LPC_GPIO2->FIODIR |= 1<<3;
+	LPC_GPIO2->FIODIR |= 1<<4;
+	LPC_GPIO2->FIODIR |= 1<<5;
+	LPC_GPIO2->FIODIR |= 1<<6;
 	
 	//Getting our initial stack location
 	unsigned int* mspval = getMSPInitialLocation();

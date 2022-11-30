@@ -21,7 +21,7 @@
 #define maxMutex 8
 
 //Time Cleo will play before preemptive switching
-#define cleoPlayTime 50
+#define cleoPlayTime 500
 
 //variable for yield in svc handler
 #define YIELD_SWITCH 0
@@ -51,25 +51,26 @@ typedef struct mutex_struct{
 	int threadOwner; //Index of the thread which currently owns the mutex
 }cleoMutex;
 
-//Types of Mutexes
-int LED; //Mutex to protect use of LEDs
-int UART; //Mutex to protect UART functions like "printf"
-int GV; //Mutex to protect use of global variables
-
 //waiting queue functions
+//check if queue is empty
+int isEmpty(void);
 //to put a thread into a queue
 void enqueue(int waitingIndex);
 //take a thread out of a queue, returns true if success, false if queue empty
-bool dequeue(void);
-//array to store the queue
-int waitingQueue[maxMutex];
-int back = - 1;
-int front = - 1;
+int dequeue(void);
 
 //external variables
 extern cleoThread catArray[maxThreads]; //catArray is an array size maxThreads containing cleoThread
 extern int cleoNums; //current number of threads created
 extern int cleoIndex; //the index of the current running thread
+//types of mutexes
+extern int LED;
+extern int UART;
+extern int GV;
+//waiting queue for mutex
+extern int waitingQueue[maxMutex];
+extern int back;
+extern int front;
 
 //threadsCore funtions that both _kernelCore.c and _threadsCore.c need
 void setThreadingWithPSP(uint32_t* threadStack); //Sets value of PSP to threadStack and changes the CONTROL register

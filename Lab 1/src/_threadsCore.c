@@ -132,3 +132,44 @@ void cleoSleep(int userSleepTime)
 	catArray[cleoIndex].sleepTime = userSleepTime; //Cleo will sleep for 5 seconds before waking
 	osYield(); //call yield to run next thread
 }
+
+//Functions to control LEDSz
+//set LEDs
+void setLED(unsigned int num)
+{
+	//clear all LEDS
+	LPC_GPIO2->FIOCLR |= 1<<6;
+	LPC_GPIO2->FIOCLR |= 1<<5;
+	LPC_GPIO2->FIOCLR |= 1<<4;
+	LPC_GPIO2->FIOCLR |= 1<<3;
+	LPC_GPIO2->FIOCLR |= 1<<2;
+	LPC_GPIO1->FIOCLR |= 1<<31;
+	LPC_GPIO1->FIOCLR |= 1<<29;
+	LPC_GPIO1->FIOCLR |= 1<<28;
+	
+	//set LEDs based on number
+	if ((num&1) == 1){
+		LPC_GPIO2->FIOSET |= 1<<6;
+	}
+	if ((num&2) == 2){
+		LPC_GPIO2->FIOSET |= 1<<5;
+	}
+	if ((num&4) == 4){
+		LPC_GPIO2->FIOSET |= 1<<4;
+	}
+	if ((num&8) == 8){
+		LPC_GPIO2->FIOSET |= 1<<3;
+	}
+	if ((num&16) == 16){
+		LPC_GPIO2->FIOSET |= 1<<2;
+	}
+	if ((num&32) == 32){
+		LPC_GPIO1->FIOSET |= 1<<31;
+	}
+	if ((num&64) == 64){
+		LPC_GPIO1->FIOSET |= 1<<29;
+	}
+	if ((num&128) == 128){
+		LPC_GPIO1->FIOSET |= 1<<28;
+	}
+}
