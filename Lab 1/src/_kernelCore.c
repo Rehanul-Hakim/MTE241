@@ -79,11 +79,7 @@ void SVC_Handler_Main(uint32_t *svc_args)
 		//the first time running storing and setting status does not happen
 		if (cleoIndex >= 0) 
 			{	
-				//if thread is already sleeping OR blocked, it won't be set to waking immediately
-				if ((catArray[cleoIndex].status != SLEEPING) && (catArray[cleoIndex].status != BLOCKED))
-				{
-					catArray[cleoIndex].status = WAKING;	
-				}
+				catArray[cleoIndex].status = WAKING;	
 				//moving the task pointer down to allocate space for 8 registers to be 
 				//stored by the handler
 				catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
@@ -163,8 +159,9 @@ int	osMutexCreate(void)
 }
 
 //thread acquires mutex if resource is free or adds thread to "waiting" queue if resource is locked
-bool osMutexAcquire(int mutexID)
+void osMutexAcquire(int mutexID)
 {
+	//check if the thread already owns this mutex
 	if (mutexArray[mutexID].threadOwner != cleoIndex)
 	{
 		//mutexArray[mutexID].cleoResource = false;
@@ -175,18 +172,18 @@ bool osMutexAcquire(int mutexID)
 			mutexArray[mutexID].threadOwner = cleoIndex;
 			//thread is now using this mutex
 			mutexArray[mutexID].cleoResource = false;
-			return true;
 		}
+		else 
+		{
 		enqueue(cleoIndex, mutexID);
 		//Trigger the SVC to switch
 		__ASM("SVC #1");
-		return false;
+		}
 	}
-	return true;
 }
 
 //once thread is done using resources, mutex is released
-bool osMutexRelease(int mutexID)
+void osMutexRelease(int mutexID)
 {
 	if (mutexArray[mutexID].threadOwner == cleoIndex) 
 	{
@@ -197,9 +194,7 @@ bool osMutexRelease(int mutexID)
 			//set the status to active
 			catArray[dequeue(mutexID)].status = WAKING;
 		}
-		return true;
 	}
-	return false;
 }
 
 //waiting queue functions (circular queue)
@@ -251,17 +246,3 @@ int dequeue(int mutexID)
 	}
 	return returnedCleo;
 } 
-
-//if resource is unavailable, perform context switch
-//void blockSwitch(int mutexID)
-//{
-//	enqueue(cleoIndex, mutexID);
-	//the status of this thread is now blocked
-	//catArray[cleoIndex].status = BLOCKED;
-	//save registers and go to next task
-	//catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 16*4);
-	//cleoScheduler();
-	//trigger the PendSV interrupt
-//	ICSR |= 1 << 28;
-//	__asm("isb");
-//}
