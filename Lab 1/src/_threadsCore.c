@@ -130,7 +130,12 @@ void cleoSleep(int userSleepTime)
 {
 	catArray[cleoIndex].status = SLEEPING; //set the thread to sleep
 	catArray[cleoIndex].sleepTime = userSleepTime; //Cleo will sleep for 5 seconds before waking
-	osYield(); //call yield to run next thread
+	//save registers and go to next task
+	catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 16*4);
+	cleoScheduler();
+	//trigger the PendSV interrupt
+	ICSR |= 1 << 28;
+	__asm("isb");
 }
 
 //Functions to control LEDSz

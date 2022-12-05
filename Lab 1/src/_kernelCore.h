@@ -15,8 +15,9 @@ int task_switch(void);
 //create the mutex
 int osMutexCreate(void);
 //thread acquires mutex if resource is free or adds thread to "waiting" queue if resource is locked
-bool osMutexAcquire(int wantedID); 
+bool osMutexAcquire(int mutexID); 
 //once thread is done using resources, mutex is released
-bool osMutexRelease(int releaseID);
-
+bool osMutexRelease(int mutexID);
+//if resource is unavailable, perform context switch
+//void blockSwitch(int mutexID);
 #endif

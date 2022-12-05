@@ -25,6 +25,7 @@
 
 //variable for yield in svc handler
 #define YIELD_SWITCH 0
+#define BLOCK_SWITCH 1
 
 //Cleo cat thread state
 #define WAKING 0 //awake, and ready to play (but not yet playing)
@@ -49,15 +50,18 @@ typedef struct mutex_struct{
 	bool cleoResource; //Boolean to indicate if resource is available or not
 	int resourceID; //Mutex ID
 	int threadOwner; //Index of the thread which currently owns the mutex
+	int waitingQueue[maxMutex]; //Waiting queue of threads
+	int back;	//Back of queue
+	int front; //Front of queue
 }cleoMutex;
 
 //waiting queue functions
 //check if queue is empty
-int isEmpty(void);
+int isEmpty(int mutexID);
 //to put a thread into a queue
-void enqueue(int waitingIndex);
+void enqueue(int waitingIndex, int mutexID);
 //take a thread out of a queue, returns true if success, false if queue empty
-int dequeue(void);
+int dequeue(int mutexID);
 
 //external variables
 extern cleoThread catArray[maxThreads]; //catArray is an array size maxThreads containing cleoThread
@@ -67,10 +71,6 @@ extern int cleoIndex; //the index of the current running thread
 extern int LED;
 extern int UART;
 extern int GV;
-//waiting queue for mutex
-extern int waitingQueue[maxMutex];
-extern int back;
-extern int front;
 
 //threadsCore funtions that both _kernelCore.c and _threadsCore.c need
 void setThreadingWithPSP(uint32_t* threadStack); //Sets value of PSP to threadStack and changes the CONTROL register

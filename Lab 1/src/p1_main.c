@@ -30,12 +30,16 @@ void task1(void* args)
 {
 	while(1)
 	{
-		osMutexAcquire(GV);
-		x++;
-		printf("Thread 1. x is: %d\n", x);
-		osMutexRelease(GV);
-		//osYield();
-		cleoSleep(500);
+		//case 1
+		osMutexAcquire(UART);
+		printf("Thread 1.\n");
+		osMutexRelease(UART);
+		//case 2
+		//osMutexAcquire(GV);
+		//x++;
+		//printf("Thread 1. x is: %d\n", x);
+		//osMutexRelease(GV);
+		osYield();
 	}
 }
 
@@ -44,16 +48,20 @@ void task2(void* args)
 {
 	while(1)
 	{
-		osMutexAcquire(GV);
-		osMutexAcquire(LED);
+		//case 1
+		osMutexAcquire(UART);
+		printf("Thread 2.\n");
+		osMutexRelease(UART);
+		//case 2
+		//osMutexAcquire(GV);
+		//osMutexAcquire(LED);
 		//y++;
-		unsigned int setNum = x%47;
-		printf("Thread 2. Set LED to: %d\n", setNum);
-		setLED(setNum);
-		osMutexRelease(GV);
-		osMutexRelease(LED);
-		//osYield();
-		cleoSleep(500);
+		//unsigned int setNum = x%47;
+		//printf("Thread 2. Set LED to: %d\n", setNum);
+		//setLED(setNum);
+		//osMutexRelease(GV);
+		//osMutexRelease(LED);
+		osYield();
 	}
 }
 
@@ -63,16 +71,20 @@ void task3(void* args)
 {
 	while(1)
 	{
-		osMutexAcquire(GV);
-		osMutexAcquire(LED);
+		//case 1
+		osMutexAcquire(UART);
+		printf("Thread 3.\n");
+		osMutexRelease(UART);
+		//case 2
+		//osMutexAcquire(GV);
+		//osMutexAcquire(LED);
 		//z++;
-		int setNum = 0x71;
-		printf("Thread 3. Set LED to: %d\n", setNum);
-		setLED(setNum);
-		osMutexRelease(GV);
-		osMutexRelease(LED);
-		//osYield();
-		cleoSleep(500);
+		//int setNum = 0x71;
+		//printf("Thread 3. Set LED to: %d\n", setNum);
+		//setLED(setNum);
+		//osMutexRelease(GV);
+		//osMutexRelease(LED);
+		osYield();
 	}
 }
 

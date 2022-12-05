@@ -13,11 +13,6 @@ int LED; //Mutex to protect use of LEDs
 int UART; //Mutex to protect UART functions like "printf"
 int GV; //Mutex to protect use of global variables
 
-//array to store the queue
-int waitingQueue[maxMutex];
-int back = - 1;
-int front = - 1;
-
 //Array of structs to store mutexes.
 //mutexArray is an array of size maxMutex containing cleoMutex
 cleoMutex mutexArray[maxMutex]; 
@@ -51,7 +46,15 @@ void cleoScheduler()
 		cleoIndex = (cleoIndex+1)%(cleoNums);				
 	}
 	//if all threads are sleeping OR blocked, then run the idle task thread
-	if (originalIndex == cleoIndex && ((catArray[cleoIndex].status == SLEEPING) || (catArray[cleoIndex].status == BLOCKED))) {
+	if (originalIndex == cleoIndex && catArray[cleoIndex].status == SLEEPING)
+	{
+		//set the index to where the idle task is to run idle
+		//the idle task is always at the end of the array
+		cleoIndex = cleoNums - 1;
+		catArray[cleoIndex].status = PLAYING;
+	}
+	else if (originalIndex == cleoIndex && catArray[cleoIndex].status == BLOCKED)
+	{
 		//set the index to where the idle task is to run idle
 		//the idle task is always at the end of the array
 		cleoIndex = cleoNums - 1;
@@ -77,11 +80,11 @@ void SVC_Handler_Main(uint32_t *svc_args)
 		if (cleoIndex >= 0) 
 			{	
 				//if thread is already sleeping OR blocked, it won't be set to waking immediately
-				if ((catArray[cleoIndex].status != SLEEPING) || (catArray[cleoIndex].status != BLOCKED))
+				if ((catArray[cleoIndex].status != SLEEPING) && (catArray[cleoIndex].status != BLOCKED))
 				{
 					catArray[cleoIndex].status = WAKING;	
 				}
-				// moving the task pointer down to allocate space for 16 registers to be 
+				//moving the task pointer down to allocate space for 8 registers to be 
 				//stored by the handler
 				catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
 			}
@@ -90,6 +93,17 @@ void SVC_Handler_Main(uint32_t *svc_args)
 			//trigger the PendSV interrupt
 			ICSR |= 1 << 28;
 			__asm("isb");
+	}
+	else if (call == BLOCK_SWITCH)
+	{
+		//the status of this thread is now blocked
+		catArray[cleoIndex].status = BLOCKED;
+		//save registers and go to next task
+		catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
+		cleoScheduler();
+		//trigger the PendSV interrupt
+		ICSR |= 1 << 28;
+		__asm("isb");
 	}
 }
 
@@ -136,6 +150,9 @@ int	osMutexCreate(void)
 		mutexArray[mutexNums].cleoResource = true;
 		//set the ID to the value of the index
 		mutexArray[mutexNums].resourceID = mutexNums;
+		//make a new waiting queue for the mutex
+		mutexArray[mutexNums].front = -1;
+		mutexArray[mutexNums].back = -1;
 		//adding new mutex to array
 		mutexNums++;
 		//return the ID of the mutex just created
@@ -146,81 +163,105 @@ int	osMutexCreate(void)
 }
 
 //thread acquires mutex if resource is free or adds thread to "waiting" queue if resource is locked
-bool osMutexAcquire(int wantedID)
+bool osMutexAcquire(int mutexID)
 {
-	//if the resource is available for use
-	if (mutexArray[wantedID].cleoResource == true) 
+	if (mutexArray[mutexID].threadOwner != cleoIndex)
 	{
-		//assign the ownership of that mutex to the thread that wants it
-		mutexArray[wantedID].threadOwner = cleoIndex;
-		//thread is now using this mutex
-		mutexArray[wantedID].cleoResource = false;
-		return true;
+		//mutexArray[mutexID].cleoResource = false;
+		//if the resource is available for use
+		if (mutexArray[mutexID].cleoResource == true) 
+		{
+			//assign the ownership of that mutex to the thread that wants it
+			mutexArray[mutexID].threadOwner = cleoIndex;
+			//thread is now using this mutex
+			mutexArray[mutexID].cleoResource = false;
+			return true;
+		}
+		enqueue(cleoIndex, mutexID);
+		//Trigger the SVC to switch
+		__ASM("SVC #1");
+		return false;
 	}
-	enqueue(cleoIndex);
-	//the status of this thread is now blocked
-	catArray[cleoIndex].status = BLOCKED;
-	return false;
+	return true;
 }
 
 //once thread is done using resources, mutex is released
-bool osMutexRelease(int releaseID)
+bool osMutexRelease(int mutexID)
 {
-	mutexArray[releaseID].cleoResource = true;
-	//check if the queue is not empty
-	if (!isEmpty()) {
-		//release the front thread
-		//set the status to active
-		catArray[dequeue()].status = WAKING;
+	if (mutexArray[mutexID].threadOwner == cleoIndex) 
+	{
+		mutexArray[mutexID].cleoResource = true;
+		//check if the queue is not empty
+		if (!isEmpty(mutexID)) {
+			//release the front thread
+			//set the status to active
+			catArray[dequeue(mutexID)].status = WAKING;
+		}
+		return true;
 	}
+	return false;
 }
 
 //waiting queue functions (circular queue)
 //check if waiting queue is empty
-int isEmpty(void) {
-  if (front == -1) {
+int isEmpty(int mutexID) {
+  if (mutexArray[mutexID].front == -1) {
 		return 1;
 	}
   return 0;
 }
 
 //put a thread into a circular queue
-void enqueue(int waitingIndex)
+void enqueue(int waitingIndex, int mutexID)
 {
 	//we don't have a full check since no more than 8 threads can be added
 	//to this array anyway
 	//if its the first thread in the array
-	if (front == - 1)
+	if (mutexArray[mutexID].front == - 1)
 	{
-		front = 0;
+		mutexArray[mutexID].front = 0;
 	}
 	//increase the back value as we add a new thread
 	//loop back to the beginning if we reached the end index
-	back = (back + 1) % cleoNums;
+	mutexArray[mutexID].back = (mutexArray[mutexID].back + 1) % cleoNums;
 	//put the index of the waiting thread into the array
-	waitingQueue[back] = waitingIndex;
+	mutexArray[mutexID].waitingQueue[mutexArray[mutexID].back] = waitingIndex;
 } 
 
 //take thread out of the array fifo style
-int dequeue(void)
+int dequeue(int mutexID)
 {
 	//if we are trying to take a thread out of an empty waiting dequeue
-  if (front == - 1)
+  if (mutexArray[mutexID].front == - 1)
   {
 		//if empty, return error
 		return -1;
   }
 	// the index of the thread that is returned
 	int returnedCleo;
-	returnedCleo = waitingQueue[front];
+	returnedCleo = mutexArray[mutexID].waitingQueue[mutexArray[mutexID].front];
 	//if queue is empty
-	if (front == back) {
-		front = -1;
-		back = -1;
+	if (mutexArray[mutexID].front == mutexArray[mutexID].back) {
+		mutexArray[mutexID].front = -1;
+		mutexArray[mutexID].back = -1;
 	} 
 	// if the queue is not empty, move front index forward
 	else {
-		front = (front + 1) % cleoNums;
+		mutexArray[mutexID].front = (mutexArray[mutexID].front + 1) % cleoNums;
 	}
 	return returnedCleo;
 } 
+
+//if resource is unavailable, perform context switch
+//void blockSwitch(int mutexID)
+//{
+//	enqueue(cleoIndex, mutexID);
+	//the status of this thread is now blocked
+	//catArray[cleoIndex].status = BLOCKED;
+	//save registers and go to next task
+	//catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 16*4);
+	//cleoScheduler();
+	//trigger the PendSV interrupt
+//	ICSR |= 1 << 28;
+//	__asm("isb");
+//}
