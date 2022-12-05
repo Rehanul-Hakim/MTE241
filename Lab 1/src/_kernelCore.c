@@ -78,17 +78,17 @@ void SVC_Handler_Main(uint32_t *svc_args)
 		//cleoIndex will only be -1 when it's the very first time running, if it's 
 		//the first time running storing and setting status does not happen
 		if (cleoIndex >= 0) 
-			{	
-				catArray[cleoIndex].status = WAKING;	
-				//moving the task pointer down to allocate space for 8 registers to be 
-				//stored by the handler
-				catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
-			}
-			//run the scheduler
-			cleoScheduler();
-			//trigger the PendSV interrupt
-			ICSR |= 1 << 28;
-			__asm("isb");
+		{	
+			catArray[cleoIndex].status = WAKING;	
+			//moving the task pointer down to allocate space for 8 registers to be 
+			//stored by the handler
+			catArray[cleoIndex].taskPointer = (uint32_t*)(__get_PSP() - 8*4);
+		}
+		//run the scheduler
+		cleoScheduler();
+		//trigger the PendSV interrupt
+		ICSR |= 1 << 28;
+		__asm("isb");
 	}
 	else if (call == BLOCK_SWITCH)
 	{
