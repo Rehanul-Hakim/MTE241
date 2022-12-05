@@ -164,7 +164,6 @@ void osMutexAcquire(int mutexID)
 	//check if the thread already owns this mutex
 	if (mutexArray[mutexID].threadOwner != cleoIndex)
 	{
-		//mutexArray[mutexID].cleoResource = false;
 		//if the resource is available for use
 		if (mutexArray[mutexID].cleoResource == true) 
 		{
